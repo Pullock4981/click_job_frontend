@@ -27,6 +27,16 @@ const Home = () => (
 
 import Dashboard from './pages/Dashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
+import Premium from './pages/Premium.jsx';
+import PostJob from './pages/PostJob.jsx';
+import MyWork from './pages/MyWork.jsx';
+import MyJobs from './pages/MyJobs.jsx';
+import Notifications from './pages/Notifications.jsx';
+import Deposit from './pages/Deposit.jsx';
+import TransactionsHistory from './pages/TransactionsHistory.jsx';
+import Advertisement from './pages/Advertisement.jsx';
+import Support from './pages/Support.jsx';
+import PlayAndEarn from './pages/PlayAndEarn.jsx';
 
 const PrivateRoute = ({ children, adminOnly = false }) => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -79,6 +89,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/referral" element={<ReferralProgram />} />
+          <Route path="/share" element={<ReferralProgram />} />
           <Route
             path="/login"
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
@@ -87,8 +98,21 @@ function App() {
             path="/register"
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />}
           />
+
+          {/* Protected Routes */}
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/admin" element={<PrivateRoute adminOnly={true}><AdminDashboard /></PrivateRoute>} />
+          <Route path="/premium" element={<PrivateRoute><Premium /></PrivateRoute>} />
+          <Route path="/post-job" element={<PrivateRoute><PostJob /></PrivateRoute>} />
+          <Route path="/my-work" element={<PrivateRoute><MyWork /></PrivateRoute>} />
+          <Route path="/my-jobs" element={<PrivateRoute><MyJobs /></PrivateRoute>} />
+          <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
+          <Route path="/deposit" element={<PrivateRoute><Deposit /></PrivateRoute>} />
+          <Route path="/transactions" element={<PrivateRoute><TransactionsHistory /></PrivateRoute>} />
+          <Route path="/ads" element={<PrivateRoute><Advertisement /></PrivateRoute>} />
+          <Route path="/support" element={<PrivateRoute><Support /></PrivateRoute>} />
+          <Route path="/play" element={<PrivateRoute><PlayAndEarn /></PrivateRoute>} />
+
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>
