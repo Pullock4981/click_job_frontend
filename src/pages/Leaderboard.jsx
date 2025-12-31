@@ -36,9 +36,11 @@ const Leaderboard = () => {
     const fetchLeaderboard = async () => {
         try {
             setLoading(true);
-            const endpoint = tabs.find(t => t.id === activeTab).endpoint;
-            const response = await api.get(endpoint);
-            setData(response.data.data || response.data);
+            const tab = tabs.find(t => t.id === activeTab);
+            const response = await api.get(tab.endpoint);
+            // Backend returns { success: true, data: { leaderboard: [...] } }
+            const leaderboardArray = response.data.data?.leaderboard || [];
+            setData(leaderboardArray);
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
             setData([]);
@@ -50,7 +52,7 @@ const Leaderboard = () => {
     const fetchMyRank = async () => {
         try {
             const response = await api.get(API_ENDPOINTS.MY_RANK);
-            setMyRank(response.data);
+            setMyRank(response.data.data); // Backend returns { success: true, data: { ranks: {...} } }
         } catch (error) {
             console.error('Error fetching my rank:', error);
         }
@@ -68,11 +70,11 @@ const Leaderboard = () => {
 
     const getValue = (user) => {
         switch (activeTab) {
-            case 'depositors': return `$${user.totalDeposited?.toFixed(2) || '0.00'}`;
+            case 'depositors': return `$${user.totalDeposits?.toFixed(2) || '0.00'}`;
             case 'workers': return `$${user.totalEarnings?.toFixed(2) || '0.00'}`;
-            case 'posters': return user.jobsCount || 0;
-            case 'referrers': return user.referralCount || 0;
-            default: return `$${user.balance?.toFixed(2) || '0.00'}`;
+            case 'posters': return user.totalJobs || 0;
+            case 'referrers': return user.totalReferrals || 0;
+            default: return `$${user.totalEarnings?.toFixed(2) || '0.00'}`;
         }
     };
 
@@ -109,7 +111,7 @@ const Leaderboard = () => {
                                     <div className="relative z-10">
                                         <FaMedal className="mx-auto mb-4" size={48} />
                                         <p className="text-sm font-bold uppercase tracking-widest opacity-80 mb-1">Rank #1</p>
-                                        <h3 className="text-2xl font-black mb-1">{data[0].username || data[0].name}</h3>
+                                        <h3 className="text-2xl font-black mb-1">{data[0].name || data[0].username}</h3>
                                         <p className="text-3xl font-black">{getValue(data[0])}</p>
                                     </div>
                                     <div className="absolute top-0 left-0 w-full h-full bg-white/10 -skew-x-12 translate-x-1/2"></div>
@@ -124,7 +126,13 @@ const Leaderboard = () => {
                                             <div className="p-3 bg-primary/10 text-primary rounded-xl"><FaUser /></div>
                                             <span className="font-bold">Global Rank</span>
                                         </div>
-                                        <span className="text-2xl font-black text-primary">#{myRank.rank || 'N/A'}</span>
+                                        <span className="text-2xl font-black text-primary">
+                                            #{activeTab === 'depositors' ? myRank.ranks?.depositor :
+                                                activeTab === 'workers' ? myRank.ranks?.worker :
+                                                    activeTab === 'posters' ? myRank.ranks?.jobPoster :
+                                                        activeTab === 'referrers' ? myRank.ranks?.referrer :
+                                                            myRank.ranks?.user || 'N/A'}
+                                        </span>
                                     </div>
                                 </div>
                             )}
