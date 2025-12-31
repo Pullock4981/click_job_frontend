@@ -85,6 +85,14 @@ export const API_ENDPOINTS = {
     UPLOAD_SINGLE: '/upload/single',
     UPLOAD_MULTIPLE: '/upload/multiple',
 
+    // Leaderboard
+    TOP_DEPOSITORS: '/leaderboard/top-depositors',
+    TOP_WORKERS: '/leaderboard/top-workers',
+    TOP_JOB_POSTERS: '/leaderboard/top-job-posters',
+    TOP_REFERRERS: '/leaderboard/top-referrers',
+    TOP_USERS: '/leaderboard/top-users',
+    MY_RANK: '/leaderboard/my-rank',
+
     // Admin
     ADMIN_USERS: '/admin/users',
     ADMIN_USER_DETAILS: (id) => `/admin/users/${id}`,
