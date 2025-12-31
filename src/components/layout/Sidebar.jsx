@@ -1,18 +1,21 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import {
     FaSearch, FaStar, FaPlusCircle, FaBriefcase, FaTasks,
     FaBell, FaWallet, FaShareAlt, FaHistory, FaAd,
-    FaTicketAlt, FaGamepad
+    FaTicketAlt, FaGamepad, FaUserShield
 } from 'react-icons/fa';
 import { HiMenuAlt2 } from 'react-icons/hi';
 import Logo from '../common/Logo';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
     const location = useLocation();
+    const { user } = useAuth();
 
     const menuItems = [
         { icon: <FaSearch />, label: 'Find Jobs', path: '/dashboard' },
+        ...(user?.role === 'admin' ? [{ icon: <FaUserShield className="text-secondary" />, label: 'Admin Panel', path: '/admin' }] : []),
         { icon: <FaStar className="text-orange-500" />, label: 'Premium', path: '/premium' },
         { icon: <FaPlusCircle />, label: 'Post New Job', path: '/post-job' },
         { icon: <FaTasks />, label: 'My Work', path: '/my-work', hasSubmenu: true },

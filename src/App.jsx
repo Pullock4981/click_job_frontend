@@ -26,6 +26,22 @@ const Home = () => (
 
 
 import Dashboard from './pages/Dashboard.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
+
+const PrivateRoute = ({ children, adminOnly = false }) => {
+  const { user, isAuthenticated, loading } = useAuth();
+
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-screen">
+      <span className="loading loading-spinner loading-lg"></span>
+    </div>
+  );
+
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (adminOnly && user?.role !== 'admin') return <Navigate to="/dashboard" />;
+
+  return children;
+};
 
 const Terms = () => (
   <Layout>
@@ -71,7 +87,8 @@ function App() {
             path="/register"
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />}
           />
-          <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/admin" element={<PrivateRoute adminOnly={true}><AdminDashboard /></PrivateRoute>} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>

@@ -90,6 +90,8 @@ export const API_ENDPOINTS = {
     ADMIN_USER_DETAILS: (id) => `/admin/users/${id}`,
     ADMIN_JOBS: '/admin/jobs',
     ADMIN_WITHDRAWALS: '/admin/withdrawals',
+    ADMIN_WITHDRAWAL_APPROVE: (id) => `/admin/withdrawals/${id}/approve`,
+    ADMIN_WITHDRAWAL_REJECT: (id) => `/admin/withdrawals/${id}/reject`,
     ADMIN_STATS: '/admin/stats',
 };
 
