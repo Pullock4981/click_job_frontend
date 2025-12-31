@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../components/layout/Layout';
-import { FaGamepad, FaTrophy, FaCoins, FaDice } from 'react-icons/fa';
+import { FaGamepad, FaTrophy, FaCoins, FaDice, FaQuestionCircle } from 'react-icons/fa';
 
 const PlayAndEarn = () => {
     const games = [
@@ -9,12 +9,9 @@ const PlayAndEarn = () => {
         { id: 3, name: 'Match 3', reward: 'Based on Score', icon: <FaGamepad className="text-green-500" />, type: 'Skill' },
     ];
 
-    // Helper for re-importing FaQuestionCircle if not in FaGamepad group
-    const FaQuestionCircle = (props) => <svg {...props} stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.31-208-208S141.3 48 256 48s208 93.31 208 208S370.7 464 256 464zM256 304c-13.25 0-24 10.75-24 24s10.75 24 24 24s24-10.75 24-24S269.3 304 256 304zM256 80c-51.04 0-92.62 39.81-95.73 90.03c-.822 13.25 9.215 24.3 22.47 24.3s23.47-10.15 24.22-22.31C208.5 150.3 229.4 128 256 128s47.5 22.31 49.03 44.03c1.5 21.31-10.72 40.72-31.12 49c-14 5.656-23.91 20.31-23.91 35.41V272c0 13.25 10.75 24 24 24s24-10.75 24-24v-6.094c39.69-16.12 63.16-56.12 59.28-98.88C351.4 121.3 310.2 80 256 80z"></path></svg>;
-
     return (
         <Layout>
-            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner">
+            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner text-base-content">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6 bg-primary p-12 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
                         <div className="relative z-10">

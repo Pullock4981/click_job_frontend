@@ -10,7 +10,7 @@ const MyJobs = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner">
+            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner text-base-content">
                 <div className="container mx-auto max-w-6xl">
                     <div className="flex justify-between items-center mb-10">
                         <h1 className="text-4xl font-black flex items-center gap-4">

@@ -14,7 +14,7 @@ const Deposit = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-base-200 py-12 px-4">
+            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner text-base-content">
                 <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                     {/* Main Content */}

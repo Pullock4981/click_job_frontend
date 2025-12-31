@@ -68,13 +68,15 @@ const PostJob = () => {
 
                             <div className="form-control">
                                 <label className="label font-bold">Description & Instructions</label>
-                                <textarea
-                                    className="textarea textarea-bordered rounded-xl h-32 bg-base-200/50 border-none focus:ring-2 ring-primary"
-                                    placeholder="What do the workers need to do step by step?"
-                                    value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    required
-                                ></textarea>
+                                <div className="form-control">
+                                    <textarea
+                                        className="textarea textarea-bordered rounded-xl h-32 bg-base-200/50 border-none focus:ring-2 ring-primary"
+                                        placeholder="What do the workers need to do step by step?"
+                                        value={formData.description}
+                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                        required
+                                    ></textarea>
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

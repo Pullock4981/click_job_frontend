@@ -5,7 +5,7 @@ import { FaAd, FaBullhorn, FaMousePointer, FaEye, FaPlusCircle } from 'react-ico
 const Advertisement = () => {
     return (
         <Layout>
-            <div className="min-h-screen bg-base-200 py-12 px-4">
+            <div className="min-h-screen bg-base-200 py-12 px-4 text-base-content">
                 <div className="max-w-5xl mx-auto">
                     <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
                         <div>
