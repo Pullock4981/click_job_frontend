@@ -39,7 +39,7 @@ const ReferralFeatures = () => {
         <section className="py-24 bg-base-100 relative">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-20">
-                    <h2 className="text-4xl md:text-6xl font-black text-base-content mb-4 tracking-tight">FEATURES</h2>
+                    <h2 className="text-3xl md:text-6xl font-black text-base-content mb-4 tracking-tight">FEATURES</h2>
                     <div className="w-24 h-2 bg-primary mx-auto rounded-full"></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

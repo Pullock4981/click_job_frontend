@@ -39,7 +39,7 @@ const ServicesSection = () => {
           <h3 className="text-3xl font-semibold text-primary">Services</h3>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {services.map((service, index) => (
             <motion.div
               key={index}
@@ -50,11 +50,10 @@ const ServicesSection = () => {
               className="card bg-base-200 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2"
             >
               <div className="card-body items-center text-center">
-                <div className={`mb-4 ${
-                  service.color === 'primary' ? 'text-primary' :
-                  service.color === 'secondary' ? 'text-secondary' :
-                  'text-accent'
-                }`}>
+                <div className={`mb-4 ${service.color === 'primary' ? 'text-primary' :
+                    service.color === 'secondary' ? 'text-secondary' :
+                      'text-accent'
+                  }`}>
                   {service.icon}
                 </div>
                 <h4 className="card-title text-2xl mb-4">{service.title}</h4>

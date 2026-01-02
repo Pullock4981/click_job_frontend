@@ -42,7 +42,7 @@ const StatsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6"
+          className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
         >
           {statItems.map((item, index) => (
             <motion.div
@@ -58,12 +58,11 @@ const StatsSection = () => {
                   <span className="loading loading-spinner loading-md"></span>
                 ) : (
                   <>
-                    <div className={`text-4xl font-bold ${
-                      item.color === 'primary' ? 'text-primary' :
-                      item.color === 'secondary' ? 'text-secondary' :
-                      item.color === 'accent' ? 'text-accent' :
-                      'text-success'
-                    }`}>
+                    <div className={`text-4xl font-bold ${item.color === 'primary' ? 'text-primary' :
+                        item.color === 'secondary' ? 'text-secondary' :
+                          item.color === 'accent' ? 'text-accent' :
+                            'text-success'
+                      }`}>
                       {item.value.toLocaleString()}
                     </div>
                     <div className="text-base-content/70 font-medium">

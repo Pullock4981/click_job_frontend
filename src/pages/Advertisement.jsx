@@ -9,34 +9,34 @@ const Advertisement = () => {
                 <div className="max-w-5xl mx-auto">
                     <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
                         <div>
-                            <h1 className="text-4xl font-black flex items-center gap-4 mb-2">
-                                <FaAd className="text-blue-500" /> Advertise with Us
+                            <h1 className="text-3xl md:text-4xl font-black flex items-center gap-4 mb-2">
+                                <FaAd className="text-blue-500" /> Advertise
                             </h1>
                             <p className="opacity-70">Boost your brand by showing ads to our active workers.</p>
                         </div>
-                        <button className="btn btn-primary rounded-2xl h-14 px-8 font-black shadow-xl shadow-primary/20 gap-3">
+                        <button className="btn btn-primary rounded-2xl h-12 md:h-14 px-6 md:px-8 font-black shadow-xl shadow-primary/20 gap-3 w-full md:w-auto">
                             <FaPlusCircle /> Create Campaign
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                        <div className="bg-base-100 p-8 rounded-3xl shadow-xl border border-base-content/5 text-center">
-                            <div className="p-4 bg-orange-500/10 text-orange-500 rounded-2xl w-fit mx-auto mb-6"><FaBullhorn size={32} /></div>
-                            <h3 className="text-xl font-bold mb-2">Banner Ads</h3>
-                            <p className="text-sm opacity-60 mb-6">Display your banners on our high-traffic dashboard pages.</p>
-                            <p className="text-2xl font-black text-primary">$0.50<span className="text-xs opacity-50 font-normal">/1k views</span></p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16">
+                        <div className="bg-base-100 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-xl border border-base-content/5 text-center">
+                            <div className="p-3 md:p-4 bg-orange-500/10 text-orange-500 rounded-2xl w-fit mx-auto mb-4 md:mb-6"><FaBullhorn size={28} md={32} /></div>
+                            <h3 className="text-lg md:text-xl font-bold mb-2">Banner Ads</h3>
+                            <p className="text-xs md:text-sm opacity-60 mb-6">Display your banners on our high-traffic dashboard pages.</p>
+                            <p className="text-xl md:text-2xl font-black text-primary">$0.50<span className="text-xs opacity-50 font-normal">/1k views</span></p>
                         </div>
-                        <div className="bg-base-100 p-8 rounded-3xl shadow-xl border border-base-content/5 text-center">
-                            <div className="p-4 bg-blue-500/10 text-blue-500 rounded-2xl w-fit mx-auto mb-6"><FaMousePointer size={32} /></div>
-                            <h3 className="text-xl font-bold mb-2">PTC Ads</h3>
-                            <p className="text-sm opacity-60 mb-6">Guaranteed visits to your website or landing pages.</p>
-                            <p className="text-2xl font-black text-primary">$0.01<span className="text-xs opacity-50 font-normal">/click</span></p>
+                        <div className="bg-base-100 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-xl border border-base-content/5 text-center">
+                            <div className="p-3 md:p-4 bg-blue-500/10 text-blue-500 rounded-2xl w-fit mx-auto mb-4 md:mb-6"><FaMousePointer size={28} md={32} /></div>
+                            <h3 className="text-lg md:text-xl font-bold mb-2">PTC Ads</h3>
+                            <p className="text-xs md:text-sm opacity-60 mb-6">Guaranteed visits to your website or landing pages.</p>
+                            <p className="text-xl md:text-2xl font-black text-primary">$0.01<span className="text-xs opacity-50 font-normal">/click</span></p>
                         </div>
-                        <div className="bg-base-100 p-8 rounded-3xl shadow-xl border border-base-content/5 text-center">
-                            <div className="p-4 bg-purple-500/10 text-purple-500 rounded-2xl w-fit mx-auto mb-6"><FaEye size={32} /></div>
-                            <h3 className="text-xl font-bold mb-2">Video Ads</h3>
-                            <p className="text-sm opacity-60 mb-6">Promote your YouTube or social media videos directly.</p>
-                            <p className="text-2xl font-black text-primary">$2.00<span className="text-xs opacity-50 font-normal">/1k views</span></p>
+                        <div className="bg-base-100 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-xl border border-base-content/5 text-center">
+                            <div className="p-3 md:p-4 bg-purple-500/10 text-purple-500 rounded-2xl w-fit mx-auto mb-4 md:mb-6"><FaEye size={28} md={32} /></div>
+                            <h3 className="text-lg md:text-xl font-bold mb-2">Video Ads</h3>
+                            <p className="text-xs md:text-sm opacity-60 mb-6">Promote your YouTube or social media videos directly.</p>
+                            <p className="text-xl md:text-2xl font-black text-primary">$2.00<span className="text-xs opacity-50 font-normal">/1k views</span></p>
                         </div>
                     </div>
 

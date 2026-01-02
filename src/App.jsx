@@ -29,6 +29,8 @@ import Dashboard from './pages/Dashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import Premium from './pages/Premium.jsx';
 import PostJob from './pages/PostJob.jsx';
+import MyTasks from './pages/MyTasks.jsx';
+import AcceptedTasks from './pages/AcceptedTasks.jsx';
 import MyWork from './pages/MyWork.jsx';
 import MyJobs from './pages/MyJobs.jsx';
 import Notifications from './pages/Notifications.jsx';
@@ -107,7 +109,9 @@ function App() {
           <Route path="/admin" element={<PrivateRoute adminOnly={true}><AdminDashboard /></PrivateRoute>} />
           <Route path="/premium" element={<PrivateRoute><Premium /></PrivateRoute>} />
           <Route path="/post-job" element={<PrivateRoute><PostJob /></PrivateRoute>} />
-          <Route path="/my-work" element={<PrivateRoute><MyWork /></PrivateRoute>} />
+          <Route path="/my-work" element={<PrivateRoute><Navigate to="/my-work/tasks" /></PrivateRoute>} />
+          <Route path="/my-work/tasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
+          <Route path="/my-work/accepted" element={<PrivateRoute><AcceptedTasks /></PrivateRoute>} />
           <Route path="/my-jobs" element={<PrivateRoute><MyJobs /></PrivateRoute>} />
           <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
           <Route path="/deposit" element={<PrivateRoute><Deposit /></PrivateRoute>} />

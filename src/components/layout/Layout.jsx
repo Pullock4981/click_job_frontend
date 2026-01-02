@@ -20,7 +20,7 @@ const Layout = ({ children, showFooter = true }) => {
           {/* Main Content Area */}
           <div className="flex-1 lg:ml-64 transition-all duration-300 min-h-screen flex flex-col">
             <Navbar toggleSidebar={toggleSidebar} />
-            <main className="flex-1">
+            <main className="flex-1 p-2 xs:p-3 md:p-8 overflow-x-hidden">
               {children}
             </main>
             {showFooter && <Footer />}

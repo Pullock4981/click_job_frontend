@@ -91,7 +91,7 @@ const Footer = () => {
         <div className="divider"></div>
 
         <div className="text-center text-sm">
-          <p>© 2025 Click Job. All rights reserved.</p>
+          <p>© 2026 Click Job. All rights reserved.</p>
           <p className="mt-2 text-base-content/70">
             71-75 Shelton Street, Covent Garden, London, United Kingdom
           </p>

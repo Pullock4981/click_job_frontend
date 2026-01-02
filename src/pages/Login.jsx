@@ -44,8 +44,8 @@ const Login = () => {
         <Layout>
             <div className="min-h-screen bg-base-100 flex flex-col">
                 {/* Page Title */}
-                <div className="py-12 bg-base-100 flex justify-center items-center">
-                    <h1 className="text-4xl md:text-5xl font-black text-base-content tracking-tight uppercase text-center px-4">
+                <div className="py-8 md:py-12 bg-base-100 flex justify-center items-center">
+                    <h1 className="text-3xl md:text-5xl font-black text-base-content tracking-tight uppercase text-center px-4">
                         Welcome to <span className="text-primary">Click Job</span>
                     </h1>
                 </div>

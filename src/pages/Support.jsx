@@ -5,30 +5,37 @@ import { FaTicketAlt, FaPlus, FaQuestionCircle, FaLifeRing, FaCommentDots } from
 const Support = () => {
     return (
         <Layout>
-            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner text-base-content">
-                <div className="max-w-4xl mx-auto">
-                    <div className="flex justify-between items-center mb-10">
-                        <h1 className="text-4xl font-black flex items-center gap-4">
-                            <FaTicketAlt className="text-secondary" /> Help & Support
-                        </h1>
-                        <button className="btn btn-primary rounded-2xl gap-2 shadow-lg shadow-primary/20">
-                            <FaPlus /> Create Ticket
-                        </button>
+            <div className="bg-base-200 py-3 md:py-10 px-3 md:px-8">
+                <div className="max-w-4xl mx-auto space-y-4 md:space-y-10">
+                    {/* Header Card */}
+                    <div className="bg-base-100 p-3 md:p-8 rounded-[1.2rem] md:rounded-[2.5rem] shadow-xl border border-primary/5">
+                        <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+                            <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
+                                <div className="p-2.5 md:p-4 bg-secondary text-white rounded-xl md:rounded-3xl shadow-xl shadow-secondary/30 flex-shrink-0">
+                                    <FaTicketAlt size={20} className="md:size-6" />
+                                </div>
+                                <h1 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight md:tracking-tighter">My <span className="text-secondary">Tickets</span></h1>
+                            </div>
+
+                            <button className="btn btn-primary rounded-xl h-10 md:h-14 md:rounded-2xl shadow-lg shadow-primary/20 w-full md:w-auto font-black text-xs md:text-sm">
+                                <FaPlus /> Create Ticket
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                        <div className="bg-base-100 p-8 rounded-3xl shadow-xl flex items-center gap-6 border border-base-content/5 group hover:bg-primary hover:text-white transition-all duration-300 cursor-pointer">
-                            <div className="p-4 bg-primary/10 text-primary rounded-2xl group-hover:bg-white/20 group-hover:text-white"><FaQuestionCircle size={32} /></div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-12">
+                        <div className="bg-base-100 p-6 md:p-8 rounded-2xl md:rounded-[2rem] shadow-xl flex items-center gap-4 md:gap-6 border border-base-content/5 group hover:bg-primary hover:text-white transition-all duration-300 cursor-pointer">
+                            <div className="p-3 md:p-4 bg-primary/10 text-primary rounded-xl group-hover:bg-white/20 group-hover:text-white"><FaQuestionCircle size={24} md={32} /></div>
                             <div>
-                                <h3 className="text-xl font-bold">Knowledge Base</h3>
-                                <p className="text-sm opacity-60 group-hover:opacity-80">Find answers to common questions.</p>
+                                <h3 className="text-lg md:text-xl font-bold">Knowledge Base</h3>
+                                <p className="text-xs md:text-sm opacity-60 group-hover:opacity-80">Find answers to common questions.</p>
                             </div>
                         </div>
-                        <div className="bg-base-100 p-8 rounded-3xl shadow-xl flex items-center gap-6 border border-base-content/5 group hover:bg-secondary hover:text-white transition-all duration-300 cursor-pointer">
-                            <div className="p-4 bg-secondary/10 text-secondary rounded-2xl group-hover:bg-white/20 group-hover:text-white"><FaCommentDots size={32} /></div>
+                        <div className="bg-base-100 p-6 md:p-8 rounded-2xl md:rounded-[2rem] shadow-xl flex items-center gap-4 md:gap-6 border border-base-content/5 group hover:bg-secondary hover:text-white transition-all duration-300 cursor-pointer">
+                            <div className="p-3 md:p-4 bg-secondary/10 text-secondary rounded-xl group-hover:bg-white/20 group-hover:text-white"><FaCommentDots size={24} md={32} /></div>
                             <div>
-                                <h3 className="text-xl font-bold">Live Chat</h3>
-                                <p className="text-sm opacity-60 group-hover:opacity-80">Talk to our support team live.</p>
+                                <h3 className="text-lg md:text-xl font-bold">Live Chat</h3>
+                                <p className="text-xs md:text-sm opacity-60 group-hover:opacity-80">Talk to our support team live.</p>
                             </div>
                         </div>
                     </div>

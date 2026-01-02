@@ -13,14 +13,14 @@ const FindGreatWorkSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h2 className="text-4xl font-bold mb-6 text-base-content">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-base-content">
             So what are you waiting for?
           </h2>
-          
+
           <h3 className="text-3xl font-semibold mb-8 text-primary">
             Find Great Work
           </h3>
-          
+
           <Link
             to="/register"
             className="btn btn-primary btn-lg inline-flex items-center gap-2 group"

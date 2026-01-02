@@ -72,7 +72,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="min-h-[70vh] lg:min-h-[80vh] flex items-center bg-gradient-to-br from-base-100 via-base-200 to-base-100 dark:from-base-100 dark:via-base-200 dark:to-base-300 relative overflow-hidden">
+    <section className="min-h-[60vh] lg:min-h-[80vh] flex items-center bg-gradient-to-br from-base-100 via-base-200 to-base-100 dark:from-base-100 dark:via-base-200 dark:to-base-300 relative overflow-hidden">
       {/* Grid background */}
       <div className="absolute inset-0 opacity-5 dark:opacity-10">
         <div className="grid grid-cols-12 h-full">
@@ -111,7 +111,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl lg:text-5xl xl:text-6xl font-bold text-base-content dark:text-neutral leading-tight relative"
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-base-content dark:text-neutral leading-tight relative"
             >
               Best Microjob & Freelancing Site To Make Money Online
             </motion.h1>

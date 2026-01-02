@@ -11,23 +11,30 @@ const TransactionsHistory = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner text-base-content">
-                <div className="container mx-auto max-w-5xl">
-                    <h1 className="text-4xl font-black mb-10 flex items-center gap-4">
-                        <FaHistory className="text-primary" /> Transaction History
-                    </h1>
+            <div className="bg-base-200 py-3 md:py-10 px-3 md:px-8">
+                <div className="max-w-5xl mx-auto space-y-4 md:space-y-10">
+                    {/* Header Card Style Header */}
+                    <div className="bg-base-100 p-3 md:p-8 rounded-[1.2rem] md:rounded-[2.5rem] shadow-xl border border-primary/5">
+                        <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
+                            <div className="p-2.5 md:p-4 bg-primary text-white rounded-xl md:rounded-3xl shadow-xl shadow-primary/30 flex-shrink-0">
+                                <FaHistory size={20} className="md:size-6" />
+                            </div>
+                            <h1 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight md:tracking-tighter">History <span className="text-primary">Transactions</span></h1>
+                        </div>
+                    </div>
 
-                    <div className="bg-base-100 rounded-[2.5rem] shadow-2xl overflow-hidden border border-base-content/5">
-                        <div className="overflow-x-auto">
+                    {/* Desktop Table View */}
+                    <div className="hidden md:block bg-base-100 rounded-3xl shadow-2xl overflow-hidden border border-base-content/5">
+                        <div className="overflow-x-auto scrollbar-hide">
                             <table className="table w-full">
                                 <thead>
-                                    <tr className="bg-primary/5 text-primary">
-                                        <th className="py-6 px-8 rounded-tl-3xl">ID</th>
+                                    <tr className="bg-primary text-primary-content">
+                                        <th className="py-6 px-8">ID</th>
                                         <th>Date</th>
                                         <th>Type</th>
                                         <th>Method</th>
                                         <th>Amount</th>
-                                        <th className="rounded-tr-3xl">Status</th>
+                                        <th className="px-8">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -47,7 +54,7 @@ const TransactionsHistory = () => {
                                             <td className={`font-black ${tx.type === 'withdrawal' ? 'text-error' : 'text-success'}`}>
                                                 {tx.type === 'withdrawal' ? '-' : '+'}${tx.amount.toFixed(2)}
                                             </td>
-                                            <td>
+                                            <td className="px-8">
                                                 <span className={`badge badge-sm py-3 px-4 rounded-lg font-bold ${tx.status === 'completed' ? 'badge-success' : 'badge-warning'}`}>
                                                     {tx.status.toUpperCase()}
                                                 </span>
@@ -57,6 +64,42 @@ const TransactionsHistory = () => {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="md:hidden space-y-4">
+                        {txs.map(tx => (
+                            <div key={tx.id} className="bg-base-100 p-5 rounded-2xl shadow-xl border border-base-content/5 space-y-4">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-2.5 rounded-xl ${tx.type === 'withdrawal' ? 'bg-error/10 text-error' : 'bg-success/10 text-success'}`}>
+                                            {tx.type === 'deposit' && <FaArrowDown />}
+                                            {tx.type === 'withdrawal' && <FaArrowUp />}
+                                            {tx.type === 'earning' && <FaExchangeAlt />}
+                                        </div>
+                                        <div>
+                                            <p className="font-black capitalize">{tx.type}</p>
+                                            <p className="text-[10px] opacity-40 font-mono font-bold tracking-widest">{tx.id}</p>
+                                        </div>
+                                    </div>
+                                    <span className={`badge badge-xs py-2 px-3 rounded-md font-bold ${tx.status === 'completed' ? 'badge-success' : 'badge-warning'}`}>
+                                        {tx.status.toUpperCase()}
+                                    </span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 pt-2">
+                                    <div>
+                                        <p className="text-[10px] uppercase font-black opacity-30 tracking-widest mb-1">Details</p>
+                                        <p className="text-xs font-bold">{tx.method} • {tx.date}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-[10px] uppercase font-black opacity-30 tracking-widest mb-1">Amount</p>
+                                        <p className={`text-lg font-black ${tx.type === 'withdrawal' ? 'text-error' : 'text-success'}`}>
+                                            {tx.type === 'withdrawal' ? '-' : '+'}${tx.amount.toFixed(2)}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

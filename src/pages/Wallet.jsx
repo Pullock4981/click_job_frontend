@@ -9,23 +9,23 @@ const Wallet = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner text-base-content">
-                <div className="max-w-5xl mx-auto space-y-8">
+            <div className="bg-base-200 py-3 md:py-10 px-3 md:px-8">
+                <div className="max-w-5xl mx-auto space-y-4 md:space-y-10">
                     {/* Main Balance Card */}
-                    <div className="bg-primary p-12 rounded-[3.5rem] text-white shadow-2xl relative overflow-hidden group">
-                        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div className="bg-primary p-6 md:p-12 rounded-[2rem] md:rounded-[3.5rem] text-white shadow-2xl relative overflow-hidden group">
+                        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center text-center md:text-left">
                             <div>
-                                <p className="text-sm font-bold uppercase tracking-[0.2em] opacity-80 mb-4 flex items-center gap-2">
+                                <p className="text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] opacity-80 mb-2 md:mb-4 flex items-center justify-center md:justify-start gap-2">
                                     <FaShieldAlt /> Global Secure Wallet
                                 </p>
-                                <h1 className="text-6xl font-black mb-2">${user?.balance?.toFixed(3) || '0.000'}</h1>
-                                <p className="opacity-60 text-sm">Your total spendable balance</p>
+                                <h1 className="text-3xl md:text-6xl font-black mb-1 md:mb-2">${user?.balance?.toFixed(3) || '0.000'}</h1>
+                                <p className="opacity-60 text-[10px] md:text-sm">Your total spendable balance</p>
                             </div>
-                            <div className="flex gap-4">
-                                <Link to="/deposit" className="btn btn-white flex-1 h-16 rounded-2xl text-primary font-black shadow-xl group-hover:scale-110 transition-transform">
+                            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                                <Link to="/deposit" className="btn btn-white flex-1 h-12 md:h-16 rounded-xl md:rounded-2xl text-primary font-black shadow-xl hover:scale-105 transition-transform text-xs md:text-base">
                                     <FaArrowDown /> Deposit
                                 </Link>
-                                <button className="btn btn-ghost bg-white/10 border-white/20 flex-1 h-16 rounded-2xl text-white font-black backdrop-blur-md">
+                                <button className="btn btn-ghost bg-white/10 border-white/20 flex-1 h-12 md:h-16 rounded-xl md:rounded-2xl text-white font-black backdrop-blur-md text-xs md:text-base">
                                     <FaArrowUp /> Withdraw
                                 </button>
                             </div>
@@ -53,12 +53,12 @@ const Wallet = () => {
                     </div>
 
                     {/* Recent Transactions Snippet */}
-                    <div className="bg-base-100 rounded-[2.5rem] shadow-2xl p-10 border border-base-content/5">
-                        <div className="flex justify-between items-center mb-8">
-                            <h2 className="text-2xl font-black flex items-center gap-3">
+                    <div className="bg-base-100 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl p-6 md:p-10 border border-base-content/5">
+                        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                            <h2 className="text-xl md:text-2xl font-black flex items-center gap-3">
                                 <FaHistory className="text-primary" /> Last Transactions
                             </h2>
-                            <Link to="/transactions" className="btn btn-ghost btn-sm rounded-xl py-0 px-4">View Full History</Link>
+                            <Link to="/transactions" className="btn btn-ghost btn-sm rounded-xl py-0 px-4">View All</Link>
                         </div>
 
                         <div className="space-y-4">

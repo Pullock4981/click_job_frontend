@@ -21,14 +21,14 @@ const Profile = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-base-200 py-12 px-4 shadow-inner text-base-content">
+            <div className="bg-base-200 py-3 md:py-10 px-3 md:px-8">
                 <div className="max-w-4xl mx-auto">
-                    <div className="bg-base-100 rounded-[3rem] shadow-2xl overflow-hidden border border-base-content/5">
+                    <div className="bg-base-100 rounded-[1.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden border border-base-content/5">
                         {/* Header/Cover */}
-                        <div className="h-48 bg-primary relative">
-                            <div className="absolute -bottom-16 left-12">
+                        <div className="h-24 md:h-44 bg-primary relative">
+                            <div className="absolute -bottom-12 md:-bottom-20 left-1/2 -translate-x-1/2 md:left-12 md:translate-x-0">
                                 <div className="relative group">
-                                    <div className="w-32 h-32 rounded-[2rem] bg-base-100 border-4 border-base-100 shadow-xl overflow-hidden">
+                                    <div className="w-24 h-24 md:w-36 md:h-36 rounded-2xl md:rounded-[2.5rem] bg-base-100 border-4 border-base-100 shadow-xl overflow-hidden">
                                         <img
                                             src={user?.avatar || `https://ui-avatars.com/api/?name=${user?.username}&background=random`}
                                             alt="Avatar"
@@ -43,17 +43,17 @@ const Profile = () => {
                         </div>
 
                         {/* Profile Info */}
-                        <div className="pt-20 px-12 pb-12">
-                            <div className="flex justify-between items-start mb-10">
+                        <div className="pt-16 md:pt-20 px-6 md:px-12 pb-8 md:pb-12">
+                            <div className="flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left mb-8 md:mb-10 gap-6">
                                 <div>
-                                    <h1 className="text-4xl font-black mb-1">{user?.username}</h1>
-                                    <p className="text-sm opacity-60 flex items-center gap-2">
+                                    <h1 className="text-3xl md:text-4xl font-black mb-1">{user?.username}</h1>
+                                    <p className="text-sm opacity-60 flex items-center justify-center md:justify-start gap-2">
                                         <FaEnvelope /> {user?.email}
                                     </p>
                                 </div>
                                 <button
                                     onClick={() => setEditing(!editing)}
-                                    className={`btn ${editing ? 'btn-ghost' : 'btn-primary'} rounded-2xl px-8 shadow-lg`}
+                                    className={`btn ${editing ? 'btn-ghost' : 'btn-primary'} rounded-xl md:rounded-2xl px-8 shadow-lg w-full md:w-auto`}
                                 >
                                     {editing ? 'Cancel' : 'Edit Profile'}
                                 </button>
@@ -80,10 +80,10 @@ const Profile = () => {
                                         <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" />
                                         <input
                                             type="email"
-                                            className="input input-bordered w-full pl-12 rounded-2xl bg-base-200/50 border-none focus:ring-2 ring-primary disabled:opacity-50"
+                                            className="input input-bordered w-full pl-12 rounded-2xl bg-base-200/50 border-none focus:ring-2 ring-primary disabled:opacity-70 cursor-not-allowed"
                                             value={formData.email}
-                                            disabled={!editing}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            disabled={true}
+                                            readOnly
                                         />
                                     </div>
                                 </div>

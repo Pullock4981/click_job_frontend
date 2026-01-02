@@ -28,7 +28,7 @@ const HowItWorks = () => {
         <section className="py-20 bg-base-100">
             <div className="container mx-auto px-4">
                 <div className="max-w-3xl mx-auto text-center mb-24">
-                    <h2 className="text-4xl md:text-6xl font-black text-base-content mb-4 tracking-tight uppercase">HOW IT WORKS</h2>
+                    <h2 className="text-3xl md:text-6xl font-black text-base-content mb-4 tracking-tight uppercase">HOW IT WORKS</h2>
                     <p className="text-base-content/60 text-xl font-medium">Simple steps to start your earning journey.</p>
                 </div>
 

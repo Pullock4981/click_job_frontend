@@ -65,31 +65,27 @@ const Navbar = ({ toggleSidebar }) => {
           </div>
 
           {/* Authenticated Header Content - Right Aligned */}
-          <div className="flex-1 flex items-center justify-end gap-3 md:gap-6 text-white">
+          <div className="flex-1 flex items-center justify-end gap-1.5 xs:gap-3 sm:gap-4 md:gap-6 text-white min-w-0">
             {/* Earning Balance Pilled */}
-            <div className="hidden sm:flex items-center gap-2 bg-white/5 dark:bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 transition-all hover:bg-white/20">
-              <span className="text-[10px] text-white/50 font-black uppercase tracking-widest">Earning</span>
-              <span className="text-sm font-black text-white">$0.200</span>
+            <div className="flex items-center gap-1 bg-white/5 dark:bg-white/10 backdrop-blur-md px-1.5 xs:px-2 md:px-4 py-1.5 md:py-2 rounded-full border border-white/10 transition-all hover:bg-white/20 flex-shrink-0">
+              <span className="hidden min-[500px]:inline text-[8px] md:text-[10px] text-white/50 font-black uppercase tracking-widest">Earning</span>
+              <span className="text-[10px] sm:text-xs md:text-sm font-black text-white">$0.200</span>
             </div>
 
             {/* Deposit Balance Pilled */}
-            <div className="hidden sm:flex items-center gap-2 bg-[#2ECC71] dark:bg-[#27AE60] px-4 py-2 rounded-full shadow-lg transition-all hover:scale-105 border border-white/10">
-              <span className="text-[10px] text-white/90 font-black uppercase tracking-widest">Deposit</span>
-              <span className="text-sm font-black text-white">$0.021</span>
+            <div className="flex items-center gap-1 bg-[#2ECC71] dark:bg-[#27AE60] px-1.5 xs:px-2 md:px-4 py-1.5 md:py-2 rounded-full shadow-lg transition-all hover:scale-105 border border-white/10 flex-shrink-0">
+              <span className="hidden min-[500px]:inline text-[8px] md:text-[10px] text-white/90 font-black uppercase tracking-widest">Deposit</span>
+              <span className="text-[10px] sm:text-xs md:text-sm font-black text-white">$0.021</span>
             </div>
 
             {/* Notification & ID */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
               <ThemeToggle />
-              <div className="relative cursor-pointer p-2 rounded-full hover:bg-white/10 transition-all">
-                <svg className="w-6 h-6 text-white/90" fill="currentColor" viewBox="0 0 20 20">
+              <div className="relative cursor-pointer p-1 xs:p-1.5 md:p-2 rounded-full hover:bg-white/10 transition-all">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white/90" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                 </svg>
-                <span className="absolute top-1 right-1 bg-red-500 text-[9px] text-white w-4 h-4 rounded-full flex items-center justify-center border-2 border-primary font-black animate-pulse">1</span>
-              </div>
-
-              <div className="hidden md:flex items-center gap-2 border-l border-white/10 pl-4 h-8">
-                <span className="text-sm font-bold text-white tracking-wide">ID: {user?.id?.slice(-5) || '49097'}</span>
+                <span className="absolute top-0.5 right-0.5 xs:top-1 xs:right-1 bg-red-500 text-[6px] xs:text-[7px] md:text-[8px] text-white w-2.5 h-2.5 xs:w-3 xs:h-3 md:w-3.5 md:h-3.5 rounded-full flex items-center justify-center border border-primary font-black animate-pulse">1</span>
               </div>
             </div>
 
