@@ -32,6 +32,7 @@ import DuplicateUser from './pages/DuplicateUser.jsx';
 import VerifiedUsers from './pages/VerifiedUsers.jsx';
 import UnverifiedUsers from './pages/UnverifiedUsers.jsx';
 import DocumentVerifyRequest from './pages/DocumentVerifyRequest.jsx';
+import AdminAccountManage from './pages/AdminAccountManage.jsx';
 import Premium from './pages/Premium.jsx';
 import PostJob from './pages/PostJob.jsx';
 import MyTasks from './pages/MyTasks.jsx';
@@ -123,6 +124,7 @@ function App() {
           <Route path="/admin/users/verified" element={<PrivateRoute adminOnly={true}><VerifiedUsers /></PrivateRoute>} />
           <Route path="/admin/users/unverified" element={<PrivateRoute adminOnly={true}><UnverifiedUsers /></PrivateRoute>} />
           <Route path="/admin/users/verify-requests" element={<PrivateRoute adminOnly={true}><DocumentVerifyRequest /></PrivateRoute>} />
+          <Route path="/admin/accounts" element={<PrivateRoute adminOnly={true}><AdminAccountManage /></PrivateRoute>} />
           <Route path="/premium" element={<PrivateRoute><Premium /></PrivateRoute>} />
           <Route path="/post-job" element={<PrivateRoute><PostJob /></PrivateRoute>} />
           <Route path="/my-work" element={<PrivateRoute><Navigate to="/my-work/tasks" /></PrivateRoute>} />
