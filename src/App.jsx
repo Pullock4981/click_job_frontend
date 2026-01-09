@@ -33,6 +33,8 @@ import VerifiedUsers from './pages/VerifiedUsers.jsx';
 import UnverifiedUsers from './pages/UnverifiedUsers.jsx';
 import DocumentVerifyRequest from './pages/DocumentVerifyRequest.jsx';
 import AdminAccountManage from './pages/AdminAccountManage.jsx';
+import AboutUs from './pages/AboutUs.jsx';
+import HeaderNoticeInfo from './pages/HeaderNoticeInfo.jsx';
 import Premium from './pages/Premium.jsx';
 import PostJob from './pages/PostJob.jsx';
 import MyTasks from './pages/MyTasks.jsx';
@@ -125,6 +127,8 @@ function App() {
           <Route path="/admin/users/unverified" element={<PrivateRoute adminOnly={true}><UnverifiedUsers /></PrivateRoute>} />
           <Route path="/admin/users/verify-requests" element={<PrivateRoute adminOnly={true}><DocumentVerifyRequest /></PrivateRoute>} />
           <Route path="/admin/accounts" element={<PrivateRoute adminOnly={true}><AdminAccountManage /></PrivateRoute>} />
+          <Route path="/admin/about-us" element={<PrivateRoute adminOnly={true}><AboutUs /></PrivateRoute>} />
+          <Route path="/admin/notice-info" element={<PrivateRoute adminOnly={true}><HeaderNoticeInfo /></PrivateRoute>} />
           <Route path="/premium" element={<PrivateRoute><Premium /></PrivateRoute>} />
           <Route path="/post-job" element={<PrivateRoute><PostJob /></PrivateRoute>} />
           <Route path="/my-work" element={<PrivateRoute><Navigate to="/my-work/tasks" /></PrivateRoute>} />

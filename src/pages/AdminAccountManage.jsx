@@ -19,6 +19,8 @@ const AdminAccountManage = () => {
         image: null
     });
 
+    const [error, setError] = useState(null);
+
     useEffect(() => {
         fetchAdmins();
     }, []);
@@ -26,19 +28,15 @@ const AdminAccountManage = () => {
     const fetchAdmins = async () => {
         try {
             setLoading(true);
-            // const response = await api.get('/admin/accounts');
-            // setAdmins(response.data);
-
-            // Mock
-            setTimeout(() => {
-                setAdmins([
-                    { id: 1, name: 'MicroDemo', email: 'Shohag786@gmail.com', phone: '01700000000', type: 'Super Admin', status: 'Active' },
-                    { id: 2, name: 'Test Admin', email: 'test@admin.com', phone: '01800000000', type: 'Admin', status: 'Inactive' }
-                ]);
-                setLoading(false);
-            }, 500);
+            const response = await api.get(API_ENDPOINTS.ADMIN_ACCOUNTS);
+            // Check for backend response structure: { success: true, data: [...] }
+            const data = response.data.data || (Array.isArray(response.data) ? response.data : []);
+            setAdmins(Array.isArray(data) ? data : []);
+            setError(null);
         } catch (error) {
             console.error(error);
+            setError(error.message || 'Failed to fetch admins');
+        } finally {
             setLoading(false);
         }
     };
@@ -96,16 +94,11 @@ const AdminAccountManage = () => {
             });
 
             if (modal.type === 'add') {
-                // await api.post('/admin/accounts', dataToSend);
-                const newAdmin = {
-                    id: Date.now(),
-                    ...formData,
-                    type: formData.type || 'Admin'
-                };
-                setAdmins([...admins, newAdmin]);
+                const response = await api.post(API_ENDPOINTS.ADMIN_ACCOUNTS, dataToSend);
+                setAdmins([...admins, response.data]);
             } else {
-                // await api.put(`/admin/accounts/${modal.data.id}`, dataToSend);
-                setAdmins(admins.map(ad => ad.id === modal.data.id ? { ...ad, ...formData } : ad));
+                const response = await api.put(`${API_ENDPOINTS.ADMIN_ACCOUNTS}/${modal.data.id}`, dataToSend);
+                setAdmins(admins.map(ad => ad.id === modal.data.id ? response.data : ad));
             }
             handleCloseModal();
         } catch (error) {
@@ -116,7 +109,7 @@ const AdminAccountManage = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this admin?')) {
             try {
-                // await api.delete(`/admin/accounts/${id}`);
+                await api.delete(`${API_ENDPOINTS.ADMIN_ACCOUNTS}/${id}`);
                 setAdmins(admins.filter(a => a.id !== id));
             } catch (error) {
                 console.error(error);
@@ -138,6 +131,11 @@ const AdminAccountManage = () => {
                 </div>
 
                 <div className="bg-white rounded-b-md shadow-md p-6">
+                    {error && (
+                        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                            <strong className="font-bold">Error:</strong> {error} - Please try refreshing the page or contact support if this persists.
+                        </div>
+                    )}
                     <div className="overflow-x-auto">
                         <table className="w-full border-collapse">
                             <thead>

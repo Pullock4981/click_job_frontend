@@ -1,4 +1,5 @@
-const base = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Force localhost for development to ensure local backend changes are seen
+const base = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'http://localhost:5000');
 export const API_BASE_URL = base.endsWith('/api') ? base : `${base}/api`;
 export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
 
@@ -95,7 +96,10 @@ export const API_ENDPOINTS = {
 
     // Admin
     ADMIN_USERS: '/admin/users',
+    ADMIN_ACCOUNTS: '/admin/accounts',
     ADMIN_USER_DETAILS: (id) => `/admin/users/${id}`,
+    COMPANY_CONTENT: '/company',
+    HEADER_NOTICE: '/admin/header-notice',
     ADMIN_JOBS: '/admin/jobs',
     ADMIN_WITHDRAWALS: '/admin/withdrawals',
     ADMIN_WITHDRAWAL_APPROVE: (id) => `/admin/withdrawals/${id}/approve`,

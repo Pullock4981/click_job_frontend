@@ -74,7 +74,7 @@ const AdminLayout = ({ children }) => {
         {
             icon: <FaBuilding />, label: 'Company & Notice Board', hasSubmenu: true,
             subItems: [
-                { label: 'About Us', path: '/admin/about' },
+                { label: 'About Us', path: '/admin/about-us' },
                 { label: 'Header & Notice Info', path: '/admin/notice-info' },
                 { label: 'Counter Info', path: '/admin/counter-info' },
                 { label: 'Contact Information', path: '/admin/contact-info' },
@@ -314,6 +314,10 @@ const AdminLayout = ({ children }) => {
                 <main className="flex-1 animate-in fade-in slide-in-from-bottom-2 duration-500">
                     {children}
                 </main>
+
+                <footer className="bg-white py-3 px-6 border-t border-gray-100 text-[10px] md:text-[11px] font-bold text-gray-400 uppercase tracking-widest text-left shrink-0">
+                    &copy; 2026 Design & Developed By Syed Ashik Mahmud Pullock .
+                </footer>
             </div>
 
             {/* Backdrop for Mobile Sidebar */}
