@@ -30,18 +30,21 @@ const TransactionsHistory = ({ type }) => {
     }, [transactionType]);
 
     return (
-        <Layout showFooter={false}>
-            <div className="min-h-screen bg-[#F4F6F8] dark:bg-base-300 -m-2 xs:-m-3 md:-m-8">
+        <Layout showFooter={true}>
+            <div className="min-h-screen bg-base-100 -m-2 xs:-m-3 md:-m-8">
+
+
                 {/* Header Section matching the site theme */}
                 <div className="bg-primary h-48 md:h-56 w-full px-4 md:px-8">
                 </div>
                 {/* Content Container */}
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 md:-mt-40 pb-12">
-                    <div className="bg-white dark:bg-base-100 rounded-lg shadow-sm border border-gray-100 dark:border-base-content/5 overflow-hidden">
+                    <div className="bg-base-200 rounded-lg shadow-sm border border-base-content/5 overflow-hidden">
                         {/* Card Header */}
-                        <div className="p-6 border-b border-gray-100 dark:border-base-content/5">
-                            <h2 className="text-primary dark:text-gray-200 font-bold text-lg md:text-xl">{title}</h2>
+                        <div className="p-6 border-b border-base-content/5">
+                            <h2 className="text-primary font-bold text-lg md:text-xl">{title}</h2>
                         </div>
+
 
 
                         {/* List Area */}

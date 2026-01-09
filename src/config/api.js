@@ -101,5 +101,7 @@ export const API_ENDPOINTS = {
     ADMIN_WITHDRAWAL_APPROVE: (id) => `/admin/withdrawals/${id}/approve`,
     ADMIN_WITHDRAWAL_REJECT: (id) => `/admin/withdrawals/${id}/reject`,
     ADMIN_STATS: '/admin/stats',
+    ADVERTISEMENTS: '/advertisements',
+    MY_ADVERTISEMENTS: '/advertisements/my',
+    SPIN_WHEEL: '/games/spin',
 };
-

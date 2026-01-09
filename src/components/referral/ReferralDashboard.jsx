@@ -49,7 +49,9 @@ const ReferralDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#F4F6F8] dark:bg-base-300 -m-2 xs:-m-3 md:-m-8">
+        <div className="min-h-screen bg-base-100 -m-2 xs:-m-3 md:-m-8">
+
+
             {/* Header Section matching the site theme */}
             <div className="bg-primary h-48 md:h-56 w-full flex items-center px-4 md:px-8">
                 {/* Header space could be used for breadcrumbs but kept clean like the image */}
@@ -60,15 +62,16 @@ const ReferralDashboard = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
                     {/* Left Card - Affiliate Link Section (Span 7/12) */}
-                    <div className="lg:col-span-7 bg-white dark:bg-base-100 rounded-lg shadow-sm border border-gray-100 dark:border-base-content/5 overflow-hidden flex flex-col">
+                    <div className="lg:col-span-7 bg-base-200 rounded-lg shadow-sm border border-base-content/5 overflow-hidden flex flex-col">
                         <div className="p-6">
-                            <h3 className="text-gray-700 dark:text-gray-200 font-bold text-sm mb-4 uppercase tracking-wide">Your Affiliate Link</h3>
+                            <h3 className="text-base-content/80 font-bold text-sm mb-4 uppercase tracking-wide">Your Affiliate Link</h3>
                             <div className="relative flex items-center">
                                 <input
                                     type="text"
                                     readOnly
                                     value={referralLink || 'Loading...'}
-                                    className="w-full bg-[#EAEEF3] dark:bg-base-200 border-none rounded p-3 pr-12 text-[13px] text-gray-500 dark:text-gray-400 font-medium focus:ring-0"
+                                    className="w-full bg-base-100 border-none rounded p-3 pr-12 text-[13px] text-base-content/60 font-medium focus:ring-0"
+
                                 />
                                 <button
                                     onClick={handleCopy}

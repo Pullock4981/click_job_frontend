@@ -51,7 +51,8 @@ const Dashboard = () => {
 
     return (
         <Layout showFooter={true}>
-            <div className="bg-base-200 dark:bg-base-100 min-h-screen">
+            <div className="bg-base-100 dark:bg-base-100 min-h-screen">
+
                 {/* Banner Ad Section */}
                 <div className="bg-primary dark:bg-base-100 h-40 md:h-56 w-full relative transition-colors duration-300">
                     <div className="container mx-auto px-4 pt-4 md:pt-6 flex justify-center">
@@ -67,14 +68,16 @@ const Dashboard = () => {
                 </div>
 
                 <div className="mx-auto px-2 xs:px-3 md:px-8 -mt-10 md:-mt-16 relative z-10 pb-20">
-                    <div className="bg-[#E9F5F8] dark:bg-base-900 rounded-xl md:rounded-2xl shadow-xl overflow-hidden border border-base-content/10 dark:border-white/5">
+                    <div className="bg-base-200 dark:bg-base-200/50 backdrop-blur-sm rounded-xl md:rounded-2xl shadow-xl overflow-hidden border border-base-content/10 dark:border-white/5">
+
 
                         {/* Filters & Sorting Bar */}
                         <div className="p-4 md:p-6 flex flex-wrap items-center gap-3">
                             <div className="dropdown">
-                                <label tabIndex={0} className="btn bg-[#3498db] hover:bg-[#2980b9] border-none text-white font-bold rounded-lg px-6">
+                                <label tabIndex={0} className="btn btn-primary text-white font-bold rounded-lg px-6">
                                     Select Category
                                 </label>
+
                                 <ul tabIndex={0} className="dropdown-content z-[20] menu p-1 shadow-2xl bg-base-100 rounded-xl w-52 mt-2 border border-base-300">
                                     <li><button className="text-sm py-2 font-bold" onClick={() => setSelectedCategory('All')}>All Categories</button></li>
                                     <li><button className="text-sm py-2 font-bold" onClick={() => setSelectedCategory('TOP JOB')}>Top Jobs</button></li>
@@ -84,9 +87,10 @@ const Dashboard = () => {
                             </div>
 
                             <div className="dropdown">
-                                <label tabIndex={0} className="btn bg-[#3498db] hover:bg-[#2980b9] border-none text-white font-bold rounded-lg px-6">
+                                <label tabIndex={0} className="btn btn-primary text-white font-bold rounded-lg px-6">
                                     Select Location
                                 </label>
+
                                 <ul tabIndex={0} className="dropdown-content z-[20] menu p-1 shadow-2xl bg-base-100 rounded-xl w-52 mt-2 border border-base-300">
                                     <li><button className="text-sm py-2 font-bold" onClick={() => setSelectedLocation('All')}>All Locations</button></li>
                                     <li><button className="text-sm py-2 font-bold" onClick={() => setSelectedLocation('Bangladesh')}>Bangladesh</button></li>
@@ -96,9 +100,10 @@ const Dashboard = () => {
 
                             <div className="ml-auto">
                                 <div className="dropdown dropdown-end">
-                                    <label tabIndex={0} className="flex items-center gap-1 font-bold text-[#2c3e50] dark:text-accent cursor-pointer">
-                                        Sort <span className="text-blue-500">▼</span>
+                                    <label tabIndex={0} className="flex items-center gap-1 font-bold text-base-content dark:text-accent cursor-pointer">
+                                        Sort <span className="text-primary">▼</span>
                                     </label>
+
                                     <ul tabIndex={0} className="dropdown-content z-[20] menu p-1 shadow-2xl bg-base-100 rounded-xl w-40 mt-2 border border-base-300">
                                         <li><button className="text-sm py-2 font-bold" onClick={() => setSortBy('newest')}>Newest</button></li>
                                         <li><button className="text-sm py-2 font-bold" onClick={() => setSortBy('highest_paying')}>Highest Pay</button></li>
@@ -112,16 +117,18 @@ const Dashboard = () => {
                             {currentJobs.map((job) => (
                                 <div
                                     key={job.id}
-                                    className="bg-base-100 dark:bg-base-300 rounded-xl p-4 md:p-6 shadow-sm border border-base-content/5 flex flex-col md:flex-row items-center gap-4 transition-all hover:shadow-md cursor-pointer group"
+                                    className="bg-base-100 dark:bg-base-100 rounded-xl p-4 md:p-6 shadow-sm border border-base-content/5 flex flex-col md:flex-row items-center gap-4 transition-all hover:shadow-md cursor-pointer group"
                                 >
+
                                     {/* Left Border Accent for Selection */}
                                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-l-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
                                     <div className="flex-1 w-full">
                                         <div className="flex flex-wrap items-center gap-2 mb-4">
-                                            <h3 className="text-lg md:text-xl font-bold text-gray-800 dark:text-white">
+                                            <h3 className="text-lg md:text-xl font-bold text-base-content">
                                                 {job.title}
                                             </h3>
+
                                             {job.category === 'TOP JOB' && (
                                                 <span className="bg-[#AAF4DB] text-[#0D7A5C] text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">
                                                     TOP JOB
@@ -131,10 +138,11 @@ const Dashboard = () => {
 
                                         {/* Progress Bar Row */}
                                         <div className="flex flex-col items-center w-full max-w-md mx-auto md:mx-0">
-                                            <span className="text-[10px] font-bold text-gray-500 mb-1">
+                                            <span className="text-[10px] font-bold text-base-content/50 mb-1">
                                                 {job.current} OF {job.target}
                                             </span>
-                                            <div className="h-1.5 w-full bg-gray-100 dark:bg-base-100 rounded-full overflow-hidden">
+                                            <div className="h-1.5 w-full bg-base-200 dark:bg-base-300 rounded-full overflow-hidden">
+
                                                 <div
                                                     className="h-full bg-[#17A55D] rounded-full"
                                                     style={{ width: `${(job.current / job.target) * 100}%` }}
@@ -158,7 +166,8 @@ const Dashboard = () => {
                             <div className="pb-12 flex justify-center">
                                 <button
                                     onClick={handleLoadMore}
-                                    className="btn bg-[#3498db] hover:bg-[#2980b9] border-none text-white font-bold rounded-lg px-10 h-12 shadow-lg hover:scale-105 transition-all text-base normal-case"
+                                    className="btn btn-primary text-white font-bold rounded-lg px-10 h-12 shadow-lg hover:scale-105 transition-all text-base normal-case"
+
                                 >
                                     More Job
                                 </button>

@@ -1,19 +1,21 @@
 export const THEME_COLORS = {
     light: {
-        primary: '#1E3A5F',      // Deep blue/teal (bottom stripe - darkest)
-        secondary: '#5F7A8B',   // Muted dusty blue (fourth stripe)
-        accent: '#4682B4',      // Medium blue (third stripe)
-        neutral: '#87CEEB',     // Light sky blue (second stripe)
-        base: '#FAF9F6',        // Pale cream/off-white (top stripe - lightest)
+        primary: '#5BADE3',      // Sky Blue (Action)
+        secondary: '#81D8BF',   // Seafoam
+        accent: '#FED97D',      // Pale Yellow
+        neutral: '#1E293B',     // Dark slate text
+        base: '#F5F7FA',        // Page background
     },
     dark: {
-        primary: '#37353E',      // Dark gray
-        secondary: '#44444E',   // Medium gray
-        accent: '#715A5A',      // Muted brown
-        neutral: '#D3DAD9',     // Light gray
-        base: '#1a1a1a',        // Dark base
+        primary: '#5BADE3',
+        secondary: '#1E293B',
+        accent: '#5BADE3',
+        neutral: '#334155',
+        base: '#0F172A',
     },
+
 };
+
 
 export const applyTheme = (theme) => {
     const root = document.documentElement;

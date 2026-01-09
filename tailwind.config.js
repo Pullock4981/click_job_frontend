@@ -44,19 +44,20 @@ export default {
           "error": "#f87272",
         },
         dark: {
-          "primary": "#5BADE3",      // Action blue
-          "secondary": "#222133",    // For sidebar items
-          "accent": "#5BADE3",       // Keeping matching accent
-          "neutral": "#1E1D2B",
-          "base-100": "#11101D",     // Very deep navy
-          "base-200": "#1A1926",     // Main dark navy background
-          "base-300": "#222133",     // For borders
-          "base-content": "#FFFFFF",  // Pure white text
+          "primary": "#5BADE3",
+          "secondary": "#1E293B",
+          "accent": "#5BADE3",
+          "neutral": "#334155",
+          "base-100": "#0F172A",
+          "base-200": "#1E293B",
+          "base-300": "#334155",
+          "base-content": "#F8FAFC",
           "info": "#3abff8",
-          "success": "#36d399",
+          "success": "#22c55e",
           "warning": "#fbbd23",
           "error": "#f87272",
         },
+
       },
     ],
     darkTheme: "dark",

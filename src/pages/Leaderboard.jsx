@@ -2,44 +2,106 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import api from '../services/api';
 import { API_ENDPOINTS } from '../config/api';
-import { FaTrophy, FaMedal, FaUser, FaWallet, FaBriefcase, FaUsers } from 'react-icons/fa';
-
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const Leaderboard = () => {
     const location = useLocation();
 
-    const tabs = [
-        { id: 'depositors', label: 'Top Depositor', icon: <FaWallet />, endpoint: API_ENDPOINTS.TOP_DEPOSITORS, path: '/top-depositors' },
-        { id: 'workers', label: 'Top Worker', icon: <FaBriefcase />, endpoint: API_ENDPOINTS.TOP_WORKERS, path: '/top-workers' },
-        { id: 'posters', label: 'Top Job Poster', icon: <FaMedal />, endpoint: API_ENDPOINTS.TOP_JOB_POSTERS, path: '/top-job-posters' },
-        { id: 'referrers', label: 'Top Refer', icon: <FaUsers />, endpoint: API_ENDPOINTS.TOP_REFERRERS, path: '/top-refer' },
-        { id: 'users', label: 'Top Users', icon: <FaUser />, endpoint: API_ENDPOINTS.TOP_USERS, path: '/top-users' },
-    ];
+    const config = {
+        '/top-depositors': {
+            id: 'depositors',
+            title: 'Top 30 Depositor',
+            subTitle: 'Calculated by current month total deposit amount',
+            announcement: 'Users to wash other every month, Where the Clean Top Depositor will be awarded. The prize list is: 100$, 70$, 50$, 40$, 35$, 30$, 25$, 20$, 15$, 10$ and last prize is 5$. Thank You.',
+            announcementBg: 'bg-[#000080]',
+            metricLabel: 'AMOUNT',
+            endpoint: API_ENDPOINTS.TOP_DEPOSITORS || '/stats/top-depositors'
+        },
+        '/top-workers': {
+            id: 'workers',
+            title: 'Top 500 Worker',
+            subTitle: 'Calculated by current month total work satisfied/approved',
+            announcement: 'For New Offer please join our Telegram Channel',
+            announcementBg: 'bg-[#006400]',
+            metricLabel: 'WORK',
+            endpoint: API_ENDPOINTS.TOP_WORKERS || '/stats/top-workers',
+            hasTimer: true
+        },
+        '/top-job-posters': {
+            id: 'posters',
+            title: 'Top 15 Job Poster',
+            subTitle: 'Calculated by total job posted',
+            announcement: '',
+            announcementBg: 'bg-[#000080]',
+            metricLabel: 'POST',
+            endpoint: API_ENDPOINTS.TOP_JOB_POSTERS || '/stats/top-job-posters'
+        },
+        '/top-refer': {
+            id: 'referrers',
+            title: 'Top 20 Refer',
+            subTitle: 'Calculated by current month refer joined',
+            announcement: '',
+            announcementBg: 'bg-[#000080]',
+            metricLabel: 'JOINED',
+            endpoint: API_ENDPOINTS.TOP_REFERRERS || '/stats/top-referrers'
+        },
+        '/top-users': {
+            id: 'users',
+            title: 'Top 50 Best User',
+            subTitle: 'Calculated by total withdraw approved',
+            announcement: '',
+            announcementBg: 'bg-[#000080]',
+            metricLabel: 'AMOUNT',
+            endpoint: API_ENDPOINTS.TOP_USERS || '/stats/top-users'
+        }
+    };
 
-    const currentTab = tabs.find(t => t.path === location.pathname) || tabs[0];
-    const [activeTab, setActiveTab] = useState(currentTab.id);
+    const activeConfig = config[location.pathname] || config['/top-depositors'];
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [myRank, setMyRank] = useState(null);
 
-    useEffect(() => {
-        const tab = tabs.find(t => t.path === location.pathname) || tabs[0];
-        setActiveTab(tab.id);
-    }, [location]);
+    const [timeLeft, setTimeLeft] = useState({
+        days: '00',
+        hours: '02',
+        minutes: '18',
+        seconds: '28'
+    });
 
     useEffect(() => {
         fetchLeaderboard();
-        fetchMyRank();
-    }, [activeTab]);
+
+        // Simple mock timer for Workers page
+        if (activeConfig.hasTimer) {
+            const timer = setInterval(() => {
+                // In a real app, this would be based on an end-of-month timestamp
+                setTimeLeft(prev => {
+                    let s = parseInt(prev.seconds) - 1;
+                    let m = parseInt(prev.minutes);
+                    let h = parseInt(prev.hours);
+                    let d = parseInt(prev.days);
+
+                    if (s < 0) { s = 59; m -= 1; }
+                    if (m < 0) { m = 59; h -= 1; }
+                    if (h < 0) { h = 23; d -= 1; }
+                    if (d < 0) { d = 0; h = 0; m = 0; s = 0; }
+
+                    return {
+                        days: String(d).padStart(2, '0'),
+                        hours: String(h).padStart(2, '0'),
+                        minutes: String(m).padStart(2, '0'),
+                        seconds: String(s).padStart(2, '0')
+                    };
+                });
+            }, 1000);
+            return () => clearInterval(timer);
+        }
+    }, [location.pathname]);
 
     const fetchLeaderboard = async () => {
         try {
             setLoading(true);
-            const tab = tabs.find(t => t.id === activeTab);
-            const response = await api.get(tab.endpoint);
-            // Backend returns { success: true, data: { leaderboard: [...] } }
-            const leaderboardArray = response.data.data?.leaderboard || [];
+            const response = await api.get(activeConfig.endpoint);
+            const leaderboardArray = response.data?.leaderboard || response.data?.data?.leaderboard || [];
             setData(leaderboardArray);
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
@@ -49,188 +111,104 @@ const Leaderboard = () => {
         }
     };
 
-    const fetchMyRank = async () => {
-        try {
-            const response = await api.get(API_ENDPOINTS.MY_RANK);
-            setMyRank(response.data.data); // Backend returns { success: true, data: { ranks: {...} } }
-        } catch (error) {
-            console.error('Error fetching my rank:', error);
-        }
-    };
-
-    const getMetricLabel = () => {
-        switch (activeTab) {
-            case 'depositors': return 'Total Deposited';
-            case 'workers': return 'Total Earned';
-            case 'posters': return 'Jobs Posted';
-            case 'referrers': return 'Total Refers';
-            default: return 'Balance';
-        }
-    };
-
-    const getValue = (user) => {
-        switch (activeTab) {
-            case 'depositors': return `$${user.totalDeposits?.toFixed(2) || '0.00'}`;
-            case 'workers': return `$${user.totalEarnings?.toFixed(2) || '0.00'}`;
-            case 'posters': return user.totalJobs || 0;
-            case 'referrers': return user.totalReferrals || 0;
-            default: return `$${user.totalEarnings?.toFixed(2) || '0.00'}`;
+    const formatValue = (user) => {
+        switch (activeConfig.id) {
+            case 'depositors': return `$ ${user.totalDeposits?.toFixed(2) || '0.00'}`;
+            case 'workers': return `Satisfied ${user.totalEarnings?.toFixed(0) || '0'} task`; // Using earnings as a proxy for count if unavailable
+            case 'posters': return `${user.totalJobs || 0} Post`;
+            case 'referrers': return `${user.totalReferrals || 0} user`;
+            case 'users': return `$ ${user.totalWithdrawals?.toFixed(2) || user.totalEarnings?.toFixed(2) || '0.00'}`;
+            default: return user.value || '0';
         }
     };
 
     return (
-        <Layout>
-            <div className="bg-base-200 py-3 md:py-10 px-3 md:px-8">
-                <div className="max-w-6xl mx-auto space-y-4 md:space-y-10">
-                    {/* Header Card */}
-                    <div className="bg-base-100 p-3 md:p-8 rounded-[1.2rem] md:rounded-[2.5rem] shadow-xl border border-primary/5">
-                        <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
-                            <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
-                                <div className="p-2 md:p-4 bg-yellow-500 text-white rounded-xl md:rounded-3xl shadow-xl shadow-yellow-500/30 flex-shrink-0">
-                                    <FaTrophy size={18} className="md:size-6 animate-pulse" />
-                                </div>
-                                <h1 className="text-lg md:text-3xl lg:text-4xl font-black tracking-tight md:tracking-tighter">Hall <span className="text-primary">of Fame</span></h1>
-                            </div>
+        <Layout showFooter={true}>
+            <div className="min-h-screen bg-[#F0F2F5] dark:bg-base-100 -m-2 xs:-m-3 md:-m-8 pb-20">
+                {/* Header Section */}
+                <div className="bg-[#5BADE3] h-48 md:h-56 w-full relative"></div>
 
-                            <div className="w-full lg:w-auto">
-                                <div className="join bg-base-200/50 p-1 rounded-xl md:rounded-2xl shadow-inner flex flex-wrap lg:flex-nowrap w-full lg:w-max">
-                                    {tabs.map(tab => (
-                                        <Link
-                                            key={tab.id}
-                                            to={tab.path}
-                                            className={`join-item btn btn-xs md:btn-sm h-10 md:h-12 border-none transition-all flex-1 lg:flex-none px-2 md:px-8 rounded-lg md:rounded-xl ${activeTab === tab.id ? 'btn-primary shadow-lg scale-[1.02]' : 'btn-ghost opacity-60'}`}
-                                        >
-                                            <span className="flex items-center gap-1.5 md:gap-2 whitespace-nowrap font-black text-[10px] md:text-sm tracking-tighter md:tracking-tight">
-                                                {tab.icon} {tab.label.replace('Top ', '')}
-                                            </span>
-                                        </Link>
+                {/* Content Area */}
+                <div className="max-w-7xl mx-auto px-2 xs:px-4 md:px-8 -mt-32 md:-mt-40 relative z-10 transition-all">
+                    <div className="bg-white dark:bg-base-200 rounded-xl shadow-2xl overflow-hidden border border-base-content/5 transition-colors">
+
+                        {/* Title Section */}
+                        <div className="text-center py-10 md:py-14">
+                            <h1 className="text-2xl md:text-3xl font-black text-[#27AE60] dark:text-green-500 uppercase tracking-tight mb-2">
+                                {activeConfig.title}
+                            </h1>
+                            <p className="text-[10px] md:text-xs font-bold text-base-content/40 uppercase tracking-widest transition-colors">
+                                {activeConfig.subTitle}
+                            </p>
+                        </div>
+
+                        {/* Announcement Bar */}
+                        <div className={`${activeConfig.announcementBg} text-white py-3 px-4 md:px-8 mx-4 md:mx-6 rounded-md mb-8`}>
+                            <p className="text-[10px] md:text-[11px] font-black uppercase text-center md:text-left leading-relaxed">
+                                {activeConfig.announcement}
+                            </p>
+                        </div>
+
+                        {/* Timer (Workers only) */}
+                        {activeConfig.hasTimer && (
+                            <div className="flex flex-col items-center mb-10">
+                                <div className="flex gap-4 md:gap-8">
+                                    {[
+                                        { label: 'Days', val: timeLeft.days },
+                                        { label: 'Hours', val: timeLeft.hours },
+                                        { label: 'Minutes', val: timeLeft.minutes },
+                                        { label: 'Seconds', val: timeLeft.seconds }
+                                    ].map((unit, i) => (
+                                        <div key={i} className="flex flex-col items-center">
+                                            <p className="text-[10px] font-black uppercase mb-1 opacity-60 transition-opacity">{unit.label}</p>
+                                            <div className="bg-[#006400] text-white w-14 h-14 md:w-20 md:h-20 flex items-center justify-center rounded-lg shadow-lg font-black text-2xl md:text-4xl tracking-tighter">
+                                                {unit.val}
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        )}
 
-                    {/* Rankings List */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Top 3 Visuals */}
-                        <div className="lg:col-span-1 space-y-4">
-                            {!loading && data.length >= 1 && (
-                                <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl text-white text-center relative overflow-hidden group transition-transform">
-                                    <div className="relative z-10">
-                                        <FaMedal className="mx-auto mb-3 md:mb-4" size={40} md={48} />
-                                        <p className="text-[10px] md:text-sm font-bold uppercase tracking-widest opacity-80 mb-1">Rank #1</p>
-                                        <h3 className="text-xl md:text-2xl font-black mb-1 truncate">{data[0].name || data[0].username}</h3>
-                                        <p className="text-2xl md:text-3xl font-black">{getValue(data[0])}</p>
-                                    </div>
-                                    <div className="absolute top-0 left-0 w-full h-full bg-white/10 -skew-x-12 translate-x-1/2"></div>
-                                </div>
-                            )}
-                            {/* My Rank Snippet */}
-                            {myRank && (
-                                <div className="bg-base-100 p-6 rounded-[2rem] shadow-xl border border-primary/20">
-                                    <p className="text-xs font-black uppercase opacity-50 mb-4">Your Standings</p>
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex items-center gap-3">
-                                            <div className="p-3 bg-primary/10 text-primary rounded-xl"><FaUser /></div>
-                                            <span className="font-bold">Global Rank</span>
-                                        </div>
-                                        <span className="text-2xl font-black text-primary">
-                                            #{activeTab === 'depositors' ? myRank.ranks?.depositor :
-                                                activeTab === 'workers' ? myRank.ranks?.worker :
-                                                    activeTab === 'posters' ? myRank.ranks?.jobPoster :
-                                                        activeTab === 'referrers' ? myRank.ranks?.referrer :
-                                                            myRank.ranks?.user || 'N/A'}
-                                        </span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* List Table */}
-                        <div className="lg:col-span-2">
-                            <div className="bg-base-100 rounded-[2.5rem] shadow-2xl overflow-hidden border border-base-content/5">
-                                {loading ? (
-                                    <div className="p-20 text-center">
-                                        <span className="loading loading-spinner loading-lg text-primary"></span>
-                                        <p className="mt-4 opacity-50 font-bold tracking-widest text-xs uppercase">Fetching Champions...</p>
-                                    </div>
-                                ) : (
-                                    <div className="text-base-content">
-                                        {/* Desktop Table */}
-                                        <div className="hidden md:block overflow-x-auto">
-                                            <table className="table w-full">
-                                                <thead>
-                                                    <tr className="bg-primary text-white">
-                                                        <th className="py-6 px-8">Rank</th>
-                                                        <th>User Details</th>
-                                                        <th className="text-right px-8">{getMetricLabel()}</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {data.map((user, index) => (
-                                                        <tr key={index} className="hover:bg-primary/5 transition-colors border-b border-base-content/5">
-                                                            <td className="px-8">
-                                                                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm ${index < 3 ? 'bg-primary text-white shadow-lg' : 'bg-base-200 opacity-60'}`}>
-                                                                    #{index + 1}
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div className="flex items-center gap-4">
-                                                                    <div className="avatar">
-                                                                        <div className="w-12 h-12 rounded-2xl bg-base-200 overflow-hidden flex items-center justify-center font-black">
-                                                                            <img src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.name}`} alt="" />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <p className="font-black">{user.username || user.username || user.name}</p>
-                                                                        <p className="text-[10px] opacity-40 uppercase font-bold tracking-widest">Member since {new Date(user.createdAt).getFullYear() || '2023'}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td className="text-right px-8">
-                                                                <div className="font-black text-xl text-primary">{getValue(user)}</div>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        {/* Mobile List View */}
-                                        <div className="md:hidden divide-y divide-base-content/5">
-                                            {data.map((user, index) => (
-                                                <div key={index} className="p-5 flex items-center justify-between hover:bg-base-200/50 transition-colors">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className={`w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center font-black text-xs ${index < 3 ? 'bg-primary text-white shadow-lg' : 'bg-base-200 opacity-60'}`}>
-                                                            {index + 1}
-                                                        </div>
-                                                        <div className="avatar">
-                                                            <div className="w-10 h-10 rounded-xl bg-base-200 overflow-hidden">
-                                                                <img src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.name}`} alt="" />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-black text-sm">{user.username || user.name}</p>
-                                                            <p className="text-[9px] opacity-40 uppercase font-black">{getMetricLabel()}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <div className="font-black text-primary">{getValue(user)}</div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {data.length === 0 && (
-                                            <div className="py-20 text-center opacity-40">
-                                                <div className="text-4xl mb-4">🏆</div>
-                                                <p className="font-black uppercase tracking-widest text-xs">No Champions in this category yet</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                        {/* Table Header Section - Styled as a blue bar in screenshots */}
+                        <div className="mx-4 md:mx-6 bg-[#000080]/5 dark:bg-white/5 rounded-t-lg border-b border-base-content/10">
+                            <div className="grid grid-cols-12 px-6 py-4">
+                                <div className="col-span-2 text-[10px] font-black uppercase tracking-widest text-base-content/40 transition-colors">Rank</div>
+                                <div className="col-span-7 md:col-span-8 text-[10px] font-black uppercase tracking-widest text-base-content/40 transition-colors text-center">User Name</div>
+                                <div className="col-span-3 md:col-span-2 text-[10px] font-black uppercase tracking-widest text-base-content/40 transition-colors text-right">{activeConfig.metricLabel}</div>
                             </div>
                         </div>
+
+                        {/* Table Content */}
+                        <div className="mx-4 md:mx-6 bg-white dark:bg-transparent mb-10 border-x border-b border-base-content/5 rounded-b-lg">
+                            {loading ? (
+                                <div className="py-20 text-center">
+                                    <span className="loading loading-spinner text-primary"></span>
+                                    <p className="text-[10px] font-black uppercase mt-4 opacity-40">Loading Champions...</p>
+                                </div>
+                            ) : data.length > 0 ? (
+                                <div className="divide-y divide-base-content/5 transition-colors">
+                                    {data.map((user, index) => (
+                                        <div key={index} className="grid grid-cols-12 px-6 py-4 hover:bg-base-200/50 transition-colors group">
+                                            <div className="col-span-2 flex items-center text-sm font-bold text-base-content/60 transition-colors">
+                                                {index + 1}
+                                            </div>
+                                            <div className="col-span-7 md:col-span-8 flex items-center justify-center text-sm font-bold text-base-content/80 transition-colors uppercase tracking-tight">
+                                                {user.username || user.name || 'Unknown User'}
+                                            </div>
+                                            <div className="col-span-3 md:col-span-2 flex items-center justify-end text-sm font-black text-[#5BADE3] dark:text-[#5BADE3] transition-colors">
+                                                {formatValue(user)}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="py-20 text-center opacity-30">
+                                    <p className="text-xs font-black uppercase">No Data Found</p>
+                                </div>
+                            )}
+                        </div>
+
                     </div>
                 </div>
             </div>

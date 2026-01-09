@@ -66,8 +66,10 @@ const Deposit = () => {
     };
 
     return (
-        <Layout showFooter={false}>
-            <div className="min-h-screen bg-[#F4F6F8] dark:bg-base-300 -m-2 xs:-m-3 md:-m-8">
+        <Layout showFooter={true}>
+            <div className="min-h-screen bg-base-100 -m-2 xs:-m-3 md:-m-8">
+
+
                 {/* Header Section matching the site theme */}
                 <div className="bg-primary h-48 md:h-56 w-full flex items-center px-4 md:px-8">
                 </div>
@@ -78,22 +80,25 @@ const Deposit = () => {
 
                         {/* Left Card - Deposit Options (Span 7/12) */}
                         <div className="lg:col-span-7 space-y-6">
-                            <div className="bg-white dark:bg-base-100 rounded-lg shadow-sm border border-gray-100 dark:border-base-content/5 p-6 md:p-8">
-                                <h2 className="text-primary dark:text-gray-200 font-bold text-xl mb-8 flex items-center gap-3">
+                            <div className="bg-base-200 rounded-lg shadow-sm border border-base-content/5 p-6 md:p-8">
+                                <h2 className="text-primary font-bold text-xl mb-8 flex items-center gap-3">
                                     <FaWallet className="text-primary" /> Deposit Methods
                                 </h2>
+
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {/* Instant Deposit */}
                                     <div
                                         onClick={handleInstantDeposit}
-                                        className="bg-gray-50 dark:bg-base-200 rounded-xl p-6 text-center hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/20 group"
+                                        className="bg-base-100 rounded-xl p-6 text-center hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/20 group"
                                     >
+
                                         <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                                             <FaGem className="text-white text-2xl" />
                                         </div>
-                                        <h3 className="text-gray-700 dark:text-gray-200 font-bold text-sm">Instant Deposit</h3>
-                                        <p className="text-[10px] text-gray-400 mt-2 font-bold uppercase tracking-widest">Nagad / bKash / Cards</p>
+                                        <h3 className="text-base-content font-bold text-sm">Instant Deposit</h3>
+                                        <p className="text-[10px] text-base-content/50 mt-2 font-bold uppercase tracking-widest">Nagad / bKash / Cards</p>
+
                                     </div>
 
                                     {/* Crypto Deposit */}

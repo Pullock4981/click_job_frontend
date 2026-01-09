@@ -42,10 +42,14 @@ import PlayAndEarn from './pages/PlayAndEarn.jsx';
 import Profile from './pages/Profile.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
 import Wallet from './pages/Wallet.jsx';
-import Withdraw from './pages/Withdraw.jsx';
+import AdsNew from './pages/AdsNew.jsx';
+import AdsHistory from './pages/AdsHistory.jsx';
 
+
+import Ticket from './pages/Ticket.jsx';
 
 const PrivateRoute = ({ children, adminOnly = false }) => {
+
   const { user, isAuthenticated, loading } = useAuth();
 
   if (loading) return (
@@ -117,7 +121,6 @@ function App() {
           <Route path="/my-jobs" element={<PrivateRoute><MyJobs /></PrivateRoute>} />
           <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
           <Route path="/deposit" element={<PrivateRoute><Deposit /></PrivateRoute>} />
-          <Route path="/withdraw" element={<PrivateRoute><Withdraw /></PrivateRoute>} />
 
           <Route path="/transactions" element={<Navigate to="/transactions/deposit" />} />
           <Route path="/transactions/withdraw" element={<PrivateRoute><TransactionsHistory type="withdraw" /></PrivateRoute>} />
@@ -125,7 +128,12 @@ function App() {
           <Route path="/transactions/history" element={<Navigate to="/transactions/deposit" />} />
 
           <Route path="/ads" element={<PrivateRoute><Advertisement /></PrivateRoute>} />
+          <Route path="/ads/new" element={<PrivateRoute><AdsNew /></PrivateRoute>} />
+          <Route path="/ads/history" element={<PrivateRoute><AdsHistory /></PrivateRoute>} />
+
+          <Route path="/ticket" element={<PrivateRoute><Ticket /></PrivateRoute>} />
           <Route path="/support" element={<PrivateRoute><Support /></PrivateRoute>} />
+
           <Route path="/play" element={<PrivateRoute><PlayAndEarn /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/wallet" element={<PrivateRoute><Wallet /></PrivateRoute>} />

@@ -17,7 +17,8 @@ const Navbar = ({ toggleSidebar }) => {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <div className={`navbar ${isAuthenticated ? 'bg-primary dark:bg-base-100 h-16 px-4 md:px-6' : 'bg-base-100 h-20 px-4'} shadow-xl sticky top-0 z-50 transition-all duration-300 border-b border-white/10 dark:border-white/5`}>
+    <div className={`navbar ${isAuthenticated ? 'bg-primary dark:bg-base-200 h-16 px-4 md:px-6' : 'bg-base-100 h-20 px-4'} shadow-lg sticky top-0 z-50 transition-all duration-300 border-b border-white/5 dark:border-white/5`}>
+
       {!isAuthenticated ? (
         <div className="container mx-auto flex items-center h-full">
           <div className="navbar-start">
@@ -180,12 +181,14 @@ const Navbar = ({ toggleSidebar }) => {
                       toggleTheme();
                       setIsProfileMenuOpen(false);
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-2 hover:bg-primary/5 transition-colors group text-left"
+                    className="flex items-center gap-3 px-4 py-2 hover:bg-primary/5 transition-colors group w-full text-left"
                   >
                     <div className="w-6 flex justify-center text-base-content group-hover:text-primary">
                       {theme === 'light' ? <FaMoon className="text-lg" /> : <FaSun className="text-lg" />}
                     </div>
-                    <span className="text-sm font-semibold text-base-content/80 group-hover:text-base-content">{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+                    <span className="text-sm font-semibold text-base-content/80 group-hover:text-base-content">
+                      {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+                    </span>
                   </button></li>
 
                   <li><button

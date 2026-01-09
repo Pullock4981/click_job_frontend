@@ -60,7 +60,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 { label: 'History', path: '/ads/history' }
             ]
         },
-        { icon: <FaTicketAlt />, label: 'Ticket', path: '/support' },
+        { icon: <FaTicketAlt />, label: 'Ticket', path: '/ticket' },
+
         { icon: <FaGamepad />, label: 'Play & Earn', path: '/play' },
     ];
 
@@ -76,9 +77,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 ></div>
             )}
 
-            <aside className={`fixed top-0 left-0 h-full bg-[#F4F6F8] dark:bg-base-100 border-r border-base-content/5 z-50 transition-all duration-300 ${isOpen ? 'w-64' : 'w-0 -translate-x-full lg:translate-x-0 lg:w-64'}`}>
+            <aside className={`fixed top-0 left-0 h-full bg-base-200 border-r border-base-content/5 z-50 transition-all duration-300 ${isOpen ? 'w-64' : 'w-0 -translate-x-full lg:translate-x-0 lg:w-64'}`}>
+
+
                 {/* Sidebar Header */}
-                <div className="h-16 flex items-center px-6 border-b border-base-content/5 gap-3 bg-white dark:bg-base-100">
+                <div className="h-16 flex items-center px-6 border-b border-base-content/5 gap-3 bg-base-100 transition-colors">
+
                     <Logo className="scale-90" />
                     <button onClick={toggleSidebar} className="lg:hidden ml-auto">
                         <HiMenuAlt2 className="text-2xl" />
@@ -99,9 +103,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                 ? 'bg-primary text-white shadow-md'
 
                                 : item.isPremium
-                                    ? 'text-[#FF6B6B] hover:bg-gray-200/50'
-                                    : 'text-[#4b5563] dark:text-base-content/70 hover:bg-gray-200/50'
+                                    ? 'text-[#FF6B6B] hover:bg-base-200'
+                                    : 'text-base-content/70 hover:bg-base-200'
                                 }`;
+
 
                             return (
                                 <li key={index} className="block w-full">
@@ -125,8 +130,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                                             <Link
                                                                 to={sub.path}
                                                                 className={`flex items-center pl-16 py-2.5 text-xs font-medium transition-all rounded-none w-full block ${isActive(sub.path)
-                                                                    ? 'text-primary font-bold bg-blue-50/50 dark:bg-blue-900/10'
-                                                                    : 'text-[#6b7280] dark:text-base-content/50 hover:bg-gray-200/30'
+                                                                    ? 'text-primary font-bold bg-primary/5'
+                                                                    : 'text-base-content/60 hover:bg-base-200'
                                                                     }`}
                                                             >
                                                                 {sub.label}
