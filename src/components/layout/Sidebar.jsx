@@ -47,7 +47,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             hasSubmenu: true,
             subItems: [
                 { label: 'Withdraw', path: '/transactions/withdraw' },
-                { label: 'Deposit', path: '/transactions/history' }
+                { label: 'Deposit', path: '/transactions/deposit' }
             ]
         },
         {
@@ -96,10 +96,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                             const isMenuOpen = openMenus[item.label] || hasActiveSub;
 
                             const itemClasses = `flex items-center gap-4 px-6 py-3.5 w-full font-medium transition-all rounded-none justify-start border-none outline-none ${isActive(item.path) || hasActiveSub
-                                    ? 'bg-[#1e60d5] text-white shadow-md'
-                                    : item.isPremium
-                                        ? 'text-[#FF6B6B] hover:bg-gray-200/50'
-                                        : 'text-[#4b5563] dark:text-base-content/70 hover:bg-gray-200/50'
+                                ? 'bg-primary text-white shadow-md'
+
+                                : item.isPremium
+                                    ? 'text-[#FF6B6B] hover:bg-gray-200/50'
+                                    : 'text-[#4b5563] dark:text-base-content/70 hover:bg-gray-200/50'
                                 }`;
 
                             return (
@@ -124,7 +125,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                                             <Link
                                                                 to={sub.path}
                                                                 className={`flex items-center pl-16 py-2.5 text-xs font-medium transition-all rounded-none w-full block ${isActive(sub.path)
-                                                                    ? 'text-[#1e60d5] font-bold bg-blue-50/50 dark:bg-blue-900/10'
+                                                                    ? 'text-primary font-bold bg-blue-50/50 dark:bg-blue-900/10'
                                                                     : 'text-[#6b7280] dark:text-base-content/50 hover:bg-gray-200/30'
                                                                     }`}
                                                             >

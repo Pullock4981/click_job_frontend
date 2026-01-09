@@ -42,6 +42,8 @@ import PlayAndEarn from './pages/PlayAndEarn.jsx';
 import Profile from './pages/Profile.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
 import Wallet from './pages/Wallet.jsx';
+import Withdraw from './pages/Withdraw.jsx';
+
 
 const PrivateRoute = ({ children, adminOnly = false }) => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -115,7 +117,13 @@ function App() {
           <Route path="/my-jobs" element={<PrivateRoute><MyJobs /></PrivateRoute>} />
           <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
           <Route path="/deposit" element={<PrivateRoute><Deposit /></PrivateRoute>} />
-          <Route path="/transactions" element={<PrivateRoute><TransactionsHistory /></PrivateRoute>} />
+          <Route path="/withdraw" element={<PrivateRoute><Withdraw /></PrivateRoute>} />
+
+          <Route path="/transactions" element={<Navigate to="/transactions/deposit" />} />
+          <Route path="/transactions/withdraw" element={<PrivateRoute><TransactionsHistory type="withdraw" /></PrivateRoute>} />
+          <Route path="/transactions/deposit" element={<PrivateRoute><TransactionsHistory type="deposit" /></PrivateRoute>} />
+          <Route path="/transactions/history" element={<Navigate to="/transactions/deposit" />} />
+
           <Route path="/ads" element={<PrivateRoute><Advertisement /></PrivateRoute>} />
           <Route path="/support" element={<PrivateRoute><Support /></PrivateRoute>} />
           <Route path="/play" element={<PrivateRoute><PlayAndEarn /></PrivateRoute>} />

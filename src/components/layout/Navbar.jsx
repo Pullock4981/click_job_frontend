@@ -67,16 +67,17 @@ const Navbar = ({ toggleSidebar }) => {
           {/* Authenticated Header Content - Right Aligned */}
           <div className="flex-1 flex items-center justify-end gap-1.5 xs:gap-3 sm:gap-4 md:gap-6 text-white min-w-0">
             {/* Earning Balance Pilled */}
-            <div className="flex items-center gap-1 bg-white/5 dark:bg-white/10 backdrop-blur-md px-1.5 xs:px-2 md:px-4 py-1.5 md:py-2 rounded-full border border-white/10 transition-all hover:bg-white/20 flex-shrink-0">
-              <span className="hidden min-[500px]:inline text-[8px] md:text-[10px] text-white/50 font-black uppercase tracking-widest">Earning</span>
-              <span className="text-[10px] sm:text-xs md:text-sm font-black text-white">$0.200</span>
+            <div className="flex items-center gap-1 bg-[#1e293b]/20 dark:bg-black/20 px-2 xs:px-3 md:px-5 py-2 rounded-full border border-white/5 transition-all hover:bg-white/10 flex-shrink-0">
+              <span className="hidden min-[500px]:inline text-[8px] md:text-[9px] text-white/40 font-black uppercase tracking-widest">Earning</span>
+              <span className="text-[10px] sm:text-xs md:text-sm font-black text-white">${user?.totalEarnings?.toFixed(3) || '0.000'}</span>
             </div>
 
             {/* Deposit Balance Pilled */}
-            <div className="flex items-center gap-1 bg-[#2ECC71] dark:bg-[#27AE60] px-1.5 xs:px-2 md:px-4 py-1.5 md:py-2 rounded-full shadow-lg transition-all hover:scale-105 border border-white/10 flex-shrink-0">
-              <span className="hidden min-[500px]:inline text-[8px] md:text-[10px] text-white/90 font-black uppercase tracking-widest">Deposit</span>
-              <span className="text-[10px] sm:text-xs md:text-sm font-black text-white">$0.021</span>
+            <div className="flex items-center gap-1 bg-[#2ECC71] px-2 xs:px-3 md:px-5 py-2 rounded-full shadow-lg transition-all hover:scale-105 border border-white/10 flex-shrink-0">
+              <span className="hidden min-[500px]:inline text-[8px] md:text-[9px] text-white/90 font-black uppercase tracking-widest">Deposit</span>
+              <span className="text-[10px] sm:text-xs md:text-sm font-black text-white">${user?.walletBalance?.toFixed(3) || '0.000'}</span>
             </div>
+
 
             {/* Notification & ID */}
             <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">

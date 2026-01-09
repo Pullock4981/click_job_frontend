@@ -25,9 +25,10 @@ const Wallet = () => {
                                 <Link to="/deposit" className="btn btn-white flex-1 h-12 md:h-16 rounded-xl md:rounded-2xl text-primary font-black shadow-xl hover:scale-105 transition-transform text-xs md:text-base">
                                     <FaArrowDown /> Deposit
                                 </Link>
-                                <button className="btn btn-ghost bg-white/10 border-white/20 flex-1 h-12 md:h-16 rounded-xl md:rounded-2xl text-white font-black backdrop-blur-md text-xs md:text-base">
+                                <Link to="/withdraw" className="btn btn-ghost bg-white/10 border-white/20 flex-1 h-12 md:h-16 rounded-xl md:rounded-2xl text-white font-black backdrop-blur-md text-xs md:text-base">
                                     <FaArrowUp /> Withdraw
-                                </button>
+                                </Link>
+
                             </div>
                         </div>
                         <FaWallet className="absolute -bottom-10 -right-10 text-white opacity-10 group-hover:rotate-12 transition-transform duration-700" size={300} />

@@ -1,105 +1,98 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
-import { FaHistory, FaArrowUp, FaArrowDown, FaExchangeAlt } from 'react-icons/fa';
+import api from '../services/api';
+import { API_ENDPOINTS } from '../config/api';
+import { format } from 'date-fns';
 
-const TransactionsHistory = () => {
-    const txs = [
-        { id: 'T6721', type: 'deposit', amount: 10.00, status: 'completed', date: '2023-12-30', method: 'bKash' },
-        { id: 'T6722', type: 'withdrawal', amount: 5.40, status: 'pending', date: '2023-12-31', method: 'Nagad' },
-        { id: 'T6723', type: 'earning', amount: 0.02, status: 'completed', date: '2023-12-31', method: 'Job Payment' },
-    ];
+const TransactionsHistory = ({ type }) => {
+    const [transactions, setTransactions] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const title = type === 'withdraw' ? 'Withdraw History' : 'Deposit History';
+    const transactionType = type === 'withdraw' ? 'withdrawal' : 'deposit';
+
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            setLoading(true);
+            try {
+                const res = await api.get(`${API_ENDPOINTS.TRANSACTIONS}?type=${transactionType}`);
+                if (res.success) {
+                    setTransactions(res.data.transactions);
+                }
+            } catch (error) {
+                console.error('Error fetching transactions:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTransactions();
+    }, [transactionType]);
 
     return (
-        <Layout>
-            <div className="bg-base-200 py-3 md:py-10 px-3 md:px-8">
-                <div className="max-w-5xl mx-auto space-y-4 md:space-y-10">
-                    {/* Header Card Style Header */}
-                    <div className="bg-base-100 p-3 md:p-8 rounded-[1.2rem] md:rounded-[2.5rem] shadow-xl border border-primary/5">
-                        <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
-                            <div className="p-2.5 md:p-4 bg-primary text-white rounded-xl md:rounded-3xl shadow-xl shadow-primary/30 flex-shrink-0">
-                                <FaHistory size={20} className="md:size-6" />
-                            </div>
-                            <h1 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight md:tracking-tighter">History <span className="text-primary">Transactions</span></h1>
+        <Layout showFooter={false}>
+            <div className="min-h-screen bg-[#F4F6F8] dark:bg-base-300 -m-2 xs:-m-3 md:-m-8">
+                {/* Header Section matching the site theme */}
+                <div className="bg-primary h-48 md:h-56 w-full px-4 md:px-8">
+                </div>
+                {/* Content Container */}
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 md:-mt-40 pb-12">
+                    <div className="bg-white dark:bg-base-100 rounded-lg shadow-sm border border-gray-100 dark:border-base-content/5 overflow-hidden">
+                        {/* Card Header */}
+                        <div className="p-6 border-b border-gray-100 dark:border-base-content/5">
+                            <h2 className="text-primary dark:text-gray-200 font-bold text-lg md:text-xl">{title}</h2>
                         </div>
-                    </div>
 
-                    {/* Desktop Table View */}
-                    <div className="hidden md:block bg-base-100 rounded-3xl shadow-2xl overflow-hidden border border-base-content/5">
-                        <div className="overflow-x-auto scrollbar-hide">
-                            <table className="table w-full">
-                                <thead>
-                                    <tr className="bg-primary text-primary-content">
-                                        <th className="py-6 px-8">ID</th>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Method</th>
-                                        <th>Amount</th>
-                                        <th className="px-8">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {txs.map(tx => (
-                                        <tr key={tx.id} className="hover:bg-base-200/50 transition-colors border-b border-base-content/5">
-                                            <td className="px-8 font-mono text-xs font-bold">{tx.id}</td>
-                                            <td className="text-sm opacity-70">{tx.date}</td>
-                                            <td>
-                                                <div className="flex items-center gap-2">
-                                                    {tx.type === 'deposit' && <FaArrowDown className="text-success" />}
-                                                    {tx.type === 'withdrawal' && <FaArrowUp className="text-error" />}
-                                                    {tx.type === 'earning' && <FaExchangeAlt className="text-info" />}
-                                                    <span className="capitalize font-bold">{tx.type}</span>
+
+                        {/* List Area */}
+                        <div className="min-h-[200px]">
+                            {loading ? (
+                                <div className="flex items-center justify-center p-12">
+                                    <span className="loading loading-spinner text-primary"></span>
+                                </div>
+                            ) : transactions.length > 0 ? (
+                                <div className="divide-y divide-gray-100 dark:divide-base-content/5">
+                                    {transactions.map((tx) => (
+                                        <div key={tx._id} className="flex items-center justify-between p-4 md:px-6 md:py-5 hover:bg-gray-50 dark:hover:bg-base-200/50 transition-colors">
+                                            <div className="flex items-center gap-4">
+                                                {/* Left Green Bar */}
+                                                <div className="w-1 h-12 bg-[#2ECC71] rounded-full"></div>
+                                                <div>
+                                                    <p className="font-bold text-[14px] text-gray-700 dark:text-gray-200">
+                                                        {tx.description || `${tx.metadata?.paymentMethod || 'Payment'} (${tx.type})`}
+                                                    </p>
+                                                    <p className="text-[12px] text-gray-400 font-medium">
+                                                        {format(new Date(tx.createdAt), 'yyyy-MM-dd HH:mm:ss')}
+                                                    </p>
                                                 </div>
-                                            </td>
-                                            <td className="text-sm font-bold">{tx.method}</td>
-                                            <td className={`font-black ${tx.type === 'withdrawal' ? 'text-error' : 'text-success'}`}>
-                                                {tx.type === 'withdrawal' ? '-' : '+'}${tx.amount.toFixed(2)}
-                                            </td>
-                                            <td className="px-8">
-                                                <span className={`badge badge-sm py-3 px-4 rounded-lg font-bold ${tx.status === 'completed' ? 'badge-success' : 'badge-warning'}`}>
-                                                    {tx.status.toUpperCase()}
+                                            </div>
+                                            <div className="text-right">
+                                                <span className="text-lg font-black text-gray-800 dark:text-gray-100">
+                                                    {tx.amount}
                                                 </span>
-                                            </td>
-                                        </tr>
+                                            </div>
+                                        </div>
                                     ))}
-                                </tbody>
-                            </table>
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-center py-24">
+                                    <p className="text-gray-400 dark:text-gray-500 font-bold text-base md:text-lg opacity-40 uppercase tracking-widest">
+                                        You Have No History
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    {/* Mobile Card View */}
-                    <div className="md:hidden space-y-4">
-                        {txs.map(tx => (
-                            <div key={tx.id} className="bg-base-100 p-5 rounded-2xl shadow-xl border border-base-content/5 space-y-4">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-2.5 rounded-xl ${tx.type === 'withdrawal' ? 'bg-error/10 text-error' : 'bg-success/10 text-success'}`}>
-                                            {tx.type === 'deposit' && <FaArrowDown />}
-                                            {tx.type === 'withdrawal' && <FaArrowUp />}
-                                            {tx.type === 'earning' && <FaExchangeAlt />}
-                                        </div>
-                                        <div>
-                                            <p className="font-black capitalize">{tx.type}</p>
-                                            <p className="text-[10px] opacity-40 font-mono font-bold tracking-widest">{tx.id}</p>
-                                        </div>
-                                    </div>
-                                    <span className={`badge badge-xs py-2 px-3 rounded-md font-bold ${tx.status === 'completed' ? 'badge-success' : 'badge-warning'}`}>
-                                        {tx.status.toUpperCase()}
-                                    </span>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4 pt-2">
-                                    <div>
-                                        <p className="text-[10px] uppercase font-black opacity-30 tracking-widest mb-1">Details</p>
-                                        <p className="text-xs font-bold">{tx.method} • {tx.date}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-[10px] uppercase font-black opacity-30 tracking-widest mb-1">Amount</p>
-                                        <p className={`text-lg font-black ${tx.type === 'withdrawal' ? 'text-error' : 'text-success'}`}>
-                                            {tx.type === 'withdrawal' ? '-' : '+'}${tx.amount.toFixed(2)}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                    {/* Footer inside content area */}
+                    <div className="mt-12 flex flex-col md:flex-row justify-between items-center text-[11px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest gap-4">
+                        <p>© 2026 CLICK JOB</p>
+                        <div className="flex flex-wrap justify-center gap-6">
+                            <button className="hover:text-primary transition-colors">About Us</button>
+                            <button className="hover:text-primary transition-colors">Privacy Policy</button>
+                            <button className="hover:text-primary transition-colors">FAQ</button>
+                            <button className="hover:text-primary transition-colors">Terms of Use</button>
+                        </div>
                     </div>
                 </div>
             </div>
