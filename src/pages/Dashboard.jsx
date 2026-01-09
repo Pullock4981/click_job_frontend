@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaFilter, FaMapMarkerAlt, FaSortAmountDown, FaGift, FaTv, FaCheckCircle, FaLaptop } from 'react-icons/fa';
 import Layout from '../components/layout/Layout';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user?.role === 'admin') {
+            navigate('/admin');
+        }
+    }, [user, navigate]);
     const INITIAL_LOAD = 30;
     const [visibleJobsCount, setVisibleJobsCount] = useState(INITIAL_LOAD);
     const [selectedCategory, setSelectedCategory] = useState('All');

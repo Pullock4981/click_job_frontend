@@ -83,7 +83,7 @@ const Privacy = () => (
 );
 
 function App() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
   const { theme } = useTheme();
 
   if (loading) {
@@ -103,11 +103,11 @@ function App() {
           <Route path="/share" element={<ReferralProgram />} />
           <Route
             path="/login"
-            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+            element={isAuthenticated ? (user?.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/dashboard" />) : <Login />}
           />
           <Route
             path="/register"
-            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />}
+            element={isAuthenticated ? (user?.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/dashboard" />) : <Register />}
           />
 
           {/* Protected Routes */}

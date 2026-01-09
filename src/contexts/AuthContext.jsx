@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.get(API_ENDPOINTS.ME);
       setUser(response.data.user);
-      
+
       // Initialize socket connection
       if (token) {
         initSocket(token);
@@ -47,16 +47,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post(API_ENDPOINTS.LOGIN, { email, password });
       const { user, token } = response.data;
-      
+
       setUser(user);
       setToken(token);
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      
+
       // Initialize socket
       initSocket(token);
-      
-      return { success: true };
+
+      return { success: true, user };
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -66,16 +66,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post(API_ENDPOINTS.REGISTER, userData);
       const { user, token } = response.data;
-      
+
       setUser(user);
       setToken(token);
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      
+
       // Initialize socket
       initSocket(token);
-      
-      return { success: true };
+
+      return { success: true, user };
     } catch (error) {
       return { success: false, error: error.message };
     }
