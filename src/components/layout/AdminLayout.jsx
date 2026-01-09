@@ -169,6 +169,20 @@ const AdminLayout = ({ children }) => {
 
     const isActive = (path) => location.pathname === path;
 
+    // Auto-expand menu based on active route
+    useEffect(() => {
+        const matchingMenu = adminMenuItems.find(item =>
+            item.hasSubmenu && item.subItems.some(sub => location.pathname === sub.path)
+        );
+
+        if (matchingMenu) {
+            setOpenMenus(prev => ({
+                ...prev,
+                [matchingMenu.label]: true
+            }));
+        }
+    }, [location.pathname]);
+
     return (
         <div className="min-h-screen bg-[#F4F6F9] flex">
             {/* Sidebar with Overlay for Mobile */}

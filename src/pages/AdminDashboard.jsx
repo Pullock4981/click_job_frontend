@@ -103,7 +103,7 @@ const AdminDashboard = () => {
 
                 {/* Footer Section */}
                 <footer className="pt-4 pb-4 text-[11px] md:text-[13px] text-gray-400 font-medium border-t border-gray-100 mt-6 text-center lg:text-left">
-                    © 2026 Design & Developed By <span className="text-gray-500 font-bold">skillworldhub</span> .
+                    © 2026 Design & Developed By <span className="text-gray-500 font-bold">Syed Ashik Mahmud Pullock</span> .
                 </footer>
             </div>
         </AdminLayout>
