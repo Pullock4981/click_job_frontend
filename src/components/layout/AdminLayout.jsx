@@ -87,15 +87,15 @@ const AdminLayout = ({ children }) => {
         {
             icon: <FaImage />, label: 'Advertisement Manage', hasSubmenu: true,
             subItems: [
-                { label: 'Ads Rate', path: '/admin/ads/rate' },
-                { label: 'Ads List', path: '/admin/ads/list' },
-                { label: 'Click Earn Ads', path: '/admin/ads/click-earn' }
+                { label: 'Ads Rate', path: '/admin/ads-rate' },
+                { label: 'Ads List', path: '/admin/ads-list' },
+                { label: 'Click Earn Ads', path: '/admin/click-earn-ads' }
             ]
         },
         {
             icon: <FaDollarSign />, label: 'Lottery Manage', hasSubmenu: true,
             subItems: [
-                { label: 'Lottery List', path: '/admin/lottery/list' }
+                { label: 'Lottery List', path: '/admin/lottery-list' }
             ]
         },
         {
@@ -109,8 +109,8 @@ const AdminLayout = ({ children }) => {
             icon: <FaList />, label: 'Job Manage', hasSubmenu: true,
             subItems: [
                 { label: 'Approval Job List', path: '/admin/jobs/approval' },
-                { label: 'Delete Rquest Jobs', path: '/admin/jobs/delete-requests' },
-                { label: 'Job Work List', path: '/admin/jobs/work-list' }
+                { label: 'Delete Request Jobs', path: '/admin/jobs/delete-requests' },
+                { label: 'Job Work List', path: '/admin/jobs/works' }
             ]
         },
         {

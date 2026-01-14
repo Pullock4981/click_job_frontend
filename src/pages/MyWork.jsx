@@ -1,37 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import { FaTasks, FaCheckCircle, FaClock, FaTimesCircle, FaSearch } from 'react-icons/fa';
+import api from '../services/api';
+import { API_ENDPOINTS } from '../config/api';
 
 const MyWork = () => {
     const [status, setStatus] = useState('all');
+    const [works, setWorks] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const submissions = [
-        { id: '101', jobTitle: 'Subscribe and Like Video', price: 0.02, status: 'approved', date: '2023-12-30' },
-        { id: '102', jobTitle: 'Follow Instagram Profile', price: 0.015, status: 'pending', date: '2023-12-31' },
-        { id: '103', jobTitle: 'Website Registration', price: 0.05, status: 'rejected', date: '2023-12-25' },
-    ];
+    useEffect(() => {
+        fetchMyWork();
+    }, []);
 
-    const getStatusStyle = (s) => {
-        switch (s) {
-            case 'approved': return 'badge-success';
-            case 'pending': return 'badge-warning';
-            case 'rejected': return 'badge-error';
-            default: return 'badge-ghost';
+    const fetchMyWork = async () => {
+        try {
+            setLoading(true);
+            const res = await api.get(API_ENDPOINTS.MY_WORK);
+            if (res.success) {
+                setWorks(res.data.works || []);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
         }
     };
 
+    const getStatusStyle = (s) => {
+        switch (s) {
+            case 'approved': return 'bg-success/10 text-success';
+            case 'pending': return 'bg-warning/10 text-warning';
+            case 'rejected': return 'bg-error/10 text-error';
+            default: return 'bg-ghost';
+        }
+    };
+
+    const filteredWorks = works.filter(w => status === 'all' || w.status === status);
+
     return (
         <Layout>
-            <div className="bg-base-200 py-3 md:py-10 px-3 md:px-8">
+            <div className="bg-base-200 py-3 md:py-10 px-3 md:px-8 min-h-screen">
                 <div className="max-w-5xl mx-auto space-y-4 md:space-y-10">
-                    {/* Header Card */}
                     <div className="bg-base-100 p-3 md:p-8 rounded-[1.2rem] md:rounded-[2.5rem] shadow-xl border border-primary/5">
                         <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
                             <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
                                 <div className="p-2.5 md:p-4 bg-primary text-white rounded-xl md:rounded-3xl shadow-xl shadow-primary/30 flex-shrink-0">
                                     <FaTasks size={20} className="md:size-6" />
                                 </div>
-                                <h1 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight md:tracking-tighter">My <span className="text-primary">Tasks</span></h1>
+                                <h1 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight md:tracking-tighter">My <span className="text-primary uppercase">Task Prove</span></h1>
                             </div>
 
                             <div className="w-full lg:w-auto">
@@ -51,41 +68,43 @@ const MyWork = () => {
                     </div>
 
                     <div className="grid gap-6">
-                        {submissions.filter(s => status === 'all' || s.status === status).map(work => (
-                            <div key={work.id} className="bg-base-100 p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-base-content/5 transition-all hover:border-primary/20">
-                                <div className="flex gap-4 items-center flex-1">
-                                    <div className={`p-3 md:p-4 rounded-xl md:rounded-2xl ${getStatusStyle(work.status)} bg-opacity-10 text-lg md:text-xl`}>
-                                        {work.status === 'approved' && <FaCheckCircle className="text-success" />}
-                                        {work.status === 'pending' && <FaClock className="text-warning" />}
-                                        {work.status === 'rejected' && <FaTimesCircle className="text-error" />}
+                        {loading ? (
+                            <div className="p-20 text-center uppercase font-bold text-gray-400">Loading your tasks...</div>
+                        ) : filteredWorks.length > 0 ? (
+                            filteredWorks.map(work => (
+                                <div key={work._id} className="bg-base-100 p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-base-content/5 transition-all hover:border-primary/20">
+                                    <div className="flex gap-4 items-center flex-1">
+                                        <div className={`p-3 md:p-4 rounded-xl md:rounded-2xl ${getStatusStyle(work.status)} text-lg md:text-xl`}>
+                                            {work.status === 'approved' && <FaCheckCircle />}
+                                            {work.status === 'pending' && <FaClock />}
+                                            {work.status === 'rejected' && <FaTimesCircle />}
+                                        </div>
+                                        <div>
+                                            <h3 className="text-base md:text-lg font-black leading-tight">{work.job?.title || 'Unknown Job'}</h3>
+                                            <p className="text-[10px] md:text-xs opacity-60">Submitted on {new Date(work.createdAt).toLocaleDateString()}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="text-base md:text-lg font-black leading-tight">{work.jobTitle}</h3>
-                                        <p className="text-[10px] md:text-xs opacity-60">Submitted on {work.date}</p>
-                                    </div>
-                                </div>
 
-                                <div className="flex items-center gap-8 w-full md:w-auto justify-between md:justify-end">
-                                    <div className="text-center">
-                                        <p className="text-xs opacity-50 uppercase font-black">Earnings</p>
-                                        <p className="text-xl font-black text-success">${work.price.toFixed(3)}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <span className={`badge ${getStatusStyle(work.status)} p-4 rounded-xl font-bold`}>
-                                            {work.status.toUpperCase()}
-                                        </span>
+                                    <div className="flex items-center gap-8 w-full md:w-auto justify-between md:justify-end">
+                                        <div className="text-center">
+                                            <p className="text-xs opacity-50 uppercase font-black">Earnings</p>
+                                            <p className="text-xl font-black text-success">${work.reward?.toFixed(3) || '0.000'}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className={`px-4 py-2 rounded-xl font-bold uppercase text-[10px] ${getStatusStyle(work.status)}`}>
+                                                {work.status}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
+                            ))
+                        ) : (
+                            <div className="bg-base-100 p-20 rounded-3xl text-center shadow-xl border-2 border-dashed border-base-content/10">
+                                <h2 className="text-2xl font-bold opacity-30">No tasks found.</h2>
+                                <p className="opacity-50 font-bold uppercase text-xs mt-2">Go to dashboard and start earning!</p>
                             </div>
-                        ))}
+                        )}
                     </div>
-
-                    {submissions.length === 0 && (
-                        <div className="bg-base-100 p-20 rounded-3xl text-center shadow-xl border-2 border-dashed border-base-content/10">
-                            <h2 className="text-2xl font-bold opacity-30">No submissions found.</h2>
-                            <p className="opacity-50">Go to find jobs and start earning!</p>
-                        </div>
-                    )}
                 </div>
             </div>
         </Layout>

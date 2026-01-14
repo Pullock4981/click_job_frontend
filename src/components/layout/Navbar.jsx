@@ -1,20 +1,78 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import ThemeToggle from '../common/ThemeToggle.jsx';
 import { useTheme } from '../../contexts/ThemeContext.jsx';
-import { FaUser, FaWallet, FaUsers, FaLifeRing, FaMoon, FaSun, FaRunning } from 'react-icons/fa';
+import { FaUser, FaWallet, FaUsers, FaLifeRing, FaMoon, FaSun, FaRunning, FaBell, FaShareAlt } from 'react-icons/fa';
 import { HiChartBar } from 'react-icons/hi';
 import Logo from '../common/Logo.jsx';
+import api from '../../services/api.js';
+import { API_ENDPOINTS } from '../../config/api.js';
 
 const Navbar = ({ toggleSidebar }) => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, refreshUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const notificationRef = useRef(null);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchNotifications();
+      // Periodically refresh user balance and notifications
+      const interval = setInterval(() => {
+        refreshUser();
+        fetchNotifications();
+      }, 30000); // every 30 seconds
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await api.get(API_ENDPOINTS.NOTIFICATIONS + '?limit=5');
+      if (res.data) {
+        setNotifications(res.data.notifications || []);
+        setUnreadCount(res.data.unreadCount || 0);
+      }
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+    }
+  };
+
+  const markAllRead = async () => {
+    try {
+      await api.put(API_ENDPOINTS.MARK_ALL_READ);
+      setUnreadCount(0);
+      fetchNotifications();
+    } catch (err) {
+      console.error('Error marking all as read:', err);
+    }
+  };
+
+  const handleShare = () => {
+    const url = window.location.origin;
+    const text = "Join Click Job and start earning!";
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
+    window.open(shareUrl, '_blank', 'width=600,height=400');
+  };
+
+  // Close dropdowns on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setIsNotificationOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className={`navbar ${isAuthenticated ? 'bg-primary dark:bg-base-200 h-16 px-4 md:px-6' : 'bg-base-100 h-20 px-4'} shadow-lg sticky top-0 z-50 transition-all duration-300 border-b border-white/5 dark:border-white/5`}>
@@ -27,6 +85,7 @@ const Navbar = ({ toggleSidebar }) => {
 
           <div className="navbar-center hidden lg:flex flex-1 justify-center gap-10">
             <Link to="/" className="font-bold text-base-content hover:text-primary transition-all duration-300 whitespace-nowrap">Home</Link>
+            <Link to="/live-support" className="font-bold text-base-content hover:text-primary transition-all duration-300 whitespace-nowrap">Live Support</Link>
             <Link to="/referral" className="font-bold text-base-content hover:text-primary transition-all duration-300 whitespace-nowrap">Referral Program</Link>
           </div>
 
@@ -46,6 +105,7 @@ const Navbar = ({ toggleSidebar }) => {
               </label>
               <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-2xl bg-base-100 rounded-box w-52 border border-base-content/10">
                 <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
+                <li><Link to="/live-support" onClick={closeMobileMenu}>Live Support</Link></li>
                 <li><Link to="/referral" onClick={closeMobileMenu}>Referral Program</Link></li>
                 <div className="divider my-1"></div>
                 <li><Link to="/register" onClick={closeMobileMenu}>Register Account</Link></li>
@@ -66,34 +126,79 @@ const Navbar = ({ toggleSidebar }) => {
           </div>
 
           {/* Authenticated Header Content - Right Aligned */}
-          <div className="flex-1 flex items-center justify-end gap-1.5 xs:gap-3 sm:gap-4 md:gap-6 text-white min-w-0">
+          <div className="flex-1 flex items-center justify-end gap-1.5 xs:gap-2 sm:gap-3 md:gap-4 text-white min-w-0">
             {/* Earning Balance Pilled */}
-            <div className="flex items-center gap-1 bg-[#1e293b]/20 dark:bg-black/20 px-2 xs:px-3 md:px-5 py-2 rounded-full border border-white/5 transition-all hover:bg-white/10 flex-shrink-0">
-              <span className="hidden min-[500px]:inline text-[8px] md:text-[9px] text-white/40 font-black uppercase tracking-widest">Earning</span>
-              <span className="text-[10px] sm:text-xs md:text-sm font-black text-white">${user?.totalEarnings?.toFixed(3) || '0.000'}</span>
+            <div className="flex items-center gap-1 bg-blue-900/60 dark:bg-black/20 px-2 xs:px-3 md:px-4 py-1.5 rounded-md border border-white/5 transition-all hover:bg-white/10 flex-shrink-0">
+              <span className="hidden min-[600px]:inline text-[10px] md:text-[11px] text-white font-bold">Earning:</span>
+              <span className="text-[11px] sm:text-xs md:text-sm font-black text-white">{user?.earningBalance?.toFixed(3) || '0.000'}</span>
             </div>
 
             {/* Deposit Balance Pilled */}
-            <div className="flex items-center gap-1 bg-[#2ECC71] px-2 xs:px-3 md:px-5 py-2 rounded-full shadow-lg transition-all hover:scale-105 border border-white/10 flex-shrink-0">
-              <span className="hidden min-[500px]:inline text-[8px] md:text-[9px] text-white/90 font-black uppercase tracking-widest">Deposit</span>
-              <span className="text-[10px] sm:text-xs md:text-sm font-black text-white">${user?.walletBalance?.toFixed(3) || '0.000'}</span>
+            <div className="flex items-center gap-1 bg-[#008000] px-2 xs:px-3 md:px-4 py-1.5 rounded-md shadow-lg transition-all hover:scale-105 border border-white/10 flex-shrink-0">
+              <span className="hidden min-[600px]:inline text-[10px] md:text-[11px] text-white font-bold">Deposit:</span>
+              <span className="text-[11px] sm:text-xs md:text-sm font-black text-white">{user?.depositBalance?.toFixed(3) || '0.000'}</span>
             </div>
 
 
             {/* Notification & ID */}
-            <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
-              <ThemeToggle />
-              <div className="relative cursor-pointer p-1 xs:p-1.5 md:p-2 rounded-full hover:bg-white/10 transition-all">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white/90" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                </svg>
-                <span className="absolute top-0.5 right-0.5 xs:top-1 xs:right-1 bg-red-500 text-[6px] xs:text-[7px] md:text-[8px] text-white w-2.5 h-2.5 xs:w-3 xs:h-3 md:w-3.5 md:h-3.5 rounded-full flex items-center justify-center border border-primary font-black animate-pulse">1</span>
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+              <div className="relative" ref={notificationRef}>
+                <button
+                  onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                  className="relative cursor-pointer p-1.5 md:p-2 rounded-full hover:bg-white/10 transition-all text-blue-200"
+                >
+                  <FaBell className="w-4 h-4 sm:w-5 sm:h-5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 bg-red-500 text-[8px] text-white w-3.5 h-3.5 rounded-full flex items-center justify-center border border-primary font-bold">{unreadCount}</span>
+                  )}
+                </button>
+
+                {/* Notification Dropdown */}
+                {isNotificationOpen && (
+                  <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-[100] animate-in fade-in zoom-in-95 duration-200">
+                    <div className="p-4 border-b border-gray-50 flex justify-between items-center">
+                      <h3 className="text-sm font-bold text-gray-800">You have <span className="text-primary">{unreadCount}</span> new notifications</h3>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        notifications.map((notif) => (
+                          <div key={notif._id} className="p-4 border-b border-gray-50 hover:bg-gray-50 transition-colors cursor-pointer">
+                            <div className="flex justify-between items-start mb-1">
+                              <span className="text-[11px] font-black text-gray-800 uppercase tracking-tighter">{notif.type.replace('_', ' ')}</span>
+                              <span className="text-[10px] text-gray-400 font-medium">{new Date(notif.createdAt).toLocaleString()}</span>
+                            </div>
+                            <p className="text-[12px] text-gray-600 leading-snug">{notif.message}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center text-gray-400 text-sm font-medium">No notifications yet</div>
+                      )}
+                    </div>
+                    <div className="p-3 bg-gray-50 text-center">
+                      <button onClick={markAllRead} className="text-xs font-bold text-primary hover:underline">Read all</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ID Display */}
+              <div className="hidden sm:block text-[13px] md:text-sm font-black text-white whitespace-nowrap">
+                ID: {user?.numericId || '-----'}
               </div>
             </div>
 
             {/* Share Badge */}
-            <div className="hidden xl:flex items-center bg-blue-600/80 px-3 py-1.5 rounded-md gap-1.5 border border-white/20">
+            <button
+              onClick={handleShare}
+              className="hidden lg:flex items-center bg-blue-600 px-3 py-1.5 rounded shadow-sm gap-2 border border-white/10 hover:bg-blue-700 transition-colors"
+            >
+              <FaShareAlt className="text-white text-xs" />
               <span className="text-[11px] font-bold text-white whitespace-nowrap">Share 62K</span>
+            </button>
+
+            {/* Theme Toggle */}
+            <div className="hidden sm:block">
+              <ThemeToggle />
             </div>
 
             {/* User Profile */}
@@ -103,19 +208,19 @@ const Navbar = ({ toggleSidebar }) => {
                 className="flex items-center gap-2 cursor-pointer group"
               >
                 <div className="avatar">
-                  <div className="w-10 h-10 rounded-full border-2 border-white ring-2 ring-blue-400 overflow-hidden bg-blue-100 flex items-center justify-center">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Shohag" alt="Avatar" className="w-full h-full object-cover" />
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-white ring-2 ring-blue-400/50 overflow-hidden bg-blue-100 flex items-center justify-center transition-transform group-hover:scale-105">
+                    <img src={user?.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`} alt="Avatar" className="w-full h-full object-cover" />
                   </div>
                 </div>
-                <div className="hidden lg:block">
-                  <div className="text-sm font-bold text-white tracking-wide">{user?.name || 'Shohag Hosen'}</div>
+                <div className="hidden min-[1100px]:block">
+                  <div className="text-sm font-bold text-white whitespace-nowrap">{user?.name || 'Shohag Hosen'}</div>
                 </div>
               </div>
 
               <ul className="dropdown-content mt-4 z-[50] p-0 shadow-2xl bg-base-100 rounded-xl w-64 overflow-hidden border border-base-300 animate-in fade-in slide-in-from-top-2">
                 {/* Header */}
                 <li className="px-5 py-4 bg-base-200/50 border-b border-base-300">
-                  <span className="text-[10px] font-black text-base-content/40 uppercase tracking-widest leading-none">Hello, {user?.name?.split(' ')[0] || 'Shohag'} {user?.name?.split(' ')[1] || 'Hosen'}</span>
+                  <span className="text-[10px] font-black text-base-content/40 uppercase tracking-widest leading-none">Hello, {user?.name?.split(' ')[0] || 'User'}</span>
                 </li>
 
                 <div className="py-1">
@@ -137,7 +242,9 @@ const Navbar = ({ toggleSidebar }) => {
                   ].map((item, i) => (
                     <li key={i}><Link
                       to={item.path}
-                      onClick={() => setIsProfileMenuOpen(false)}
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                      }}
                       className="flex items-center gap-3 px-4 py-2 hover:bg-primary/5 transition-colors group"
                     >
                       <div className="w-6 flex justify-center text-base-content group-hover:text-primary">{item.icon}</div>
@@ -166,7 +273,7 @@ const Navbar = ({ toggleSidebar }) => {
                   </a></li>
 
                   <li><Link
-                    to="/support"
+                    to="/live-support"
                     onClick={() => setIsProfileMenuOpen(false)}
                     className="flex items-center gap-3 px-4 py-2 hover:bg-primary/5 transition-colors group"
                   >

@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import { FaMapMarkerAlt, FaListUl, FaInfoCircle, FaDollarSign, FaTrash, FaPlus, FaImage, FaExclamationTriangle } from 'react-icons/fa';
+import api from '../services/api';
+import { toast } from 'react-hot-toast';
 
 const PostJob = () => {
+    const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         // Step 1: Location
@@ -74,7 +78,7 @@ const PostJob = () => {
 
             {[1, 2, 3, 4].map((s) => (
                 <div key={s} className="flex flex-col items-center">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold mb-2 transition-all duration-300 ${step >= s ? 'bg-blue-500 text-white shadow-lg' : 'bg-white text-gray-400 border-2 border-gray-200'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold mb-2 transition-all duration-300 ${step >= s ? 'bg-blue-500 text-white shadow-lg' : 'bg-base-100 dark:bg-base-200 text-gray-400 border-2 border-gray-200 dark:border-white/10'}`}>
                         {s}
                     </div>
                     <span className={`text-[10px] md:text-xs font-bold whitespace-nowrap ${step >= s ? 'text-blue-500' : 'text-gray-400'}`}>
@@ -88,12 +92,46 @@ const PostJob = () => {
     const nextStep = () => setStep(s => Math.min(s + 1, 4));
     const prevStep = () => setStep(s => Math.max(s - 1, 1));
 
+    const handleThumbnailUpload = async () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            try {
+                toast.loading('Uploading thumbnail...', { id: 'upload' });
+                const res = await api.upload('/upload/single', file);
+                if (res.success) {
+                    setFormData({ ...formData, thumbnail: res.data.url });
+                    toast.success('Thumbnail uploaded!', { id: 'upload' });
+                }
+            } catch (err) {
+                toast.error(err.message || 'Upload failed', { id: 'upload' });
+            }
+        };
+        input.click();
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const res = await api.post('/jobs', formData);
+            if (res.success) {
+                toast.success('Job Posted Successfully!');
+                navigate('/my-jobs');
+            }
+        } catch (err) {
+            toast.error(err.message || 'Failed to post job');
+        }
+    };
+
     return (
         <Layout showFooter={true}>
             <div className="bg-primary dark:bg-base-100 h-40 md:h-56 w-full relative"></div>
 
             <div className="mx-auto px-4 md:px-8 -mt-20 relative z-10 pb-20">
-                <div className="bg-white dark:bg-base-800 rounded-xl shadow-2xl overflow-hidden border border-base-200 dark:border-white/5 p-6 md:p-10">
+                <div className="bg-base-100 dark:bg-base-900 rounded-xl shadow-2xl overflow-hidden border border-base-200 dark:border-white/5 p-6 md:p-10 transition-colors">
                     {renderStepHeader()}
 
                     <div className="min-h-[400px]">
@@ -104,7 +142,7 @@ const PostJob = () => {
                                         <button
                                             key={zone}
                                             onClick={() => setFormData({ ...formData, selectedZone: zone, hiddenCountries: [] })}
-                                            className={`px-4 py-1.5 rounded text-xs md:text-sm font-bold border transition-all ${formData.selectedZone === zone ? 'bg-[#00C875] border-[#00C875] text-white' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}
+                                            className={`px-4 py-1.5 rounded text-xs md:text-sm font-bold border transition-all ${formData.selectedZone === zone ? 'bg-[#00C875] border-[#00C875] text-white' : 'bg-base-100 dark:bg-base-200 text-base-content border-base-content/10 hover:border-primary'}`}
                                         >
                                             {zone}
                                         </button>
@@ -122,7 +160,7 @@ const PostJob = () => {
                                         <button
                                             key={country}
                                             onClick={() => toggleCountry(country)}
-                                            className={`px-3 py-1 rounded text-[10px] md:text-xs font-medium border transition-all ${formData.hiddenCountries.includes(country) ? 'bg-red-500 border-red-500 text-white' : 'bg-gray-100 border-transparent text-gray-500 hover:bg-gray-200'}`}
+                                            className={`px-3 py-1 rounded text-[10px] md:text-xs font-medium border transition-all ${formData.hiddenCountries.includes(country) ? 'bg-red-500 border-red-500 text-white' : 'bg-base-200 dark:bg-base-300 border-transparent text-base-content/70 hover:bg-base-300 dark:hover:bg-base-100'}`}
                                         >
                                             {country}
                                         </button>
@@ -138,7 +176,7 @@ const PostJob = () => {
                                         <button
                                             key={cat}
                                             onClick={() => setFormData({ ...formData, category: cat })}
-                                            className={`px-3 py-1.5 rounded text-[10px] md:text-xs font-bold border transition-all ${formData.category === cat ? 'bg-[#00C875] border-[#00C875] text-white' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}
+                                            className={`px-3 py-1.5 rounded text-[10px] md:text-xs font-bold border transition-all ${formData.category === cat ? 'bg-[#00C875] border-[#00C875] text-white' : 'bg-base-100 dark:bg-base-200 text-base-content border-base-content/10 hover:border-primary'}`}
                                         >
                                             {cat}
                                         </button>
@@ -154,7 +192,7 @@ const PostJob = () => {
                                             <button
                                                 key={subCat}
                                                 onClick={() => setFormData({ ...formData, subCategory: subCat })}
-                                                className={`px-3 py-1.5 rounded text-[10px] md:text-xs font-bold border transition-all ${formData.subCategory === subCat ? 'bg-blue-500 border-blue-500 text-white shadow-md' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}
+                                                className={`px-3 py-1.5 rounded text-[10px] md:text-xs font-bold border transition-all ${formData.subCategory === subCat ? 'bg-blue-500 border-blue-500 text-white shadow-md' : 'bg-base-100 dark:bg-base-200 text-base-content border-base-content/10 hover:border-primary'}`}
                                             >
                                                 {subCat}
                                             </button>
@@ -171,7 +209,7 @@ const PostJob = () => {
                                     <div className="relative">
                                         <input
                                             type="text"
-                                            className="w-full border-b-2 border-gray-200 focus:border-blue-400 py-2 text-sm outline-none transition-all pr-12"
+                                            className="w-full bg-base-100 dark:bg-base-900 border-b-2 border-gray-200 dark:border-white/10 focus:border-blue-400 py-2 text-sm outline-none transition-all pr-12"
                                             placeholder="Only English"
                                             value={formData.title}
                                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -184,7 +222,7 @@ const PostJob = () => {
                                     <label className="text-xs font-bold text-[#0D7A5C] mb-2 block italic">• Note (optional)</label>
                                     <input
                                         type="text"
-                                        className="w-full border border-gray-200 rounded px-3 py-2 text-xs outline-none focus:border-blue-400 transition-all"
+                                        className="w-full bg-base-100 dark:bg-base-900 border border-gray-200 dark:border-white/10 rounded px-3 py-2 text-xs outline-none focus:border-blue-400 transition-all"
                                         placeholder="Note only you can see"
                                         value={formData.note}
                                         onChange={(e) => setFormData({ ...formData, note: e.target.value })}
@@ -195,19 +233,24 @@ const PostJob = () => {
                                     <label className="text-xs font-bold text-[#0D7A5C] mb-3 block italic">• What specific tasks need to be Completed</label>
                                     <div className="space-y-3">
                                         {formData.tasks.map((task, idx) => (
-                                            <div key={idx} className="flex gap-2">
+                                            <div key={task.id} className="flex gap-2">
                                                 <div className="shrink-0 w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
                                                     {idx + 1}
                                                 </div>
                                                 <textarea
-                                                    className="flex-1 border border-gray-200 rounded px-3 py-2 text-xs outline-none focus:border-blue-400 h-20"
                                                     placeholder="Step by step instruction..."
-                                                    value={task}
-                                                    onChange={(e) => updateTask(idx, e.target.value)}
-                                                />
-                                                <button onClick={() => removeTask(idx)} className="text-red-400 hover:text-red-600 transition-colors p-2">
-                                                    <FaTrash size={14} />
-                                                </button>
+                                                    className="w-full bg-base-100 dark:bg-base-900 border border-base-content/10 p-4 rounded text-xs md:text-sm font-medium focus:border-primary outline-none transition-all min-h-[100px] placeholder:text-base-content/20"
+                                                    value={task.instruction}
+                                                    onChange={(e) => updateTask(task.id, e.target.value)}
+                                                ></textarea>
+                                                {formData.tasks.length > 1 && (
+                                                    <button
+                                                        onClick={() => removeTask(task.id)}
+                                                        className="p-2 text-red-500 hover:bg-red-50 rounded transition-colors"
+                                                    >
+                                                        <FaTrash />
+                                                    </button>
+                                                )}
                                             </div>
                                         ))}
                                         <button
@@ -220,106 +263,117 @@ const PostJob = () => {
                                 </div>
 
                                 <div>
-                                    <label className="text-xs font-bold text-red-500 mb-2 block italic">• Required proof the job was Completed</label>
+                                    <label className="text-xs font-bold text-[#E94E5C] mb-2 block italic">• Required proof the job was Completed</label>
                                     <textarea
-                                        className="w-full border border-gray-200 rounded px-3 py-4 text-xs outline-none focus:border-blue-400 h-32"
+                                        className="w-full bg-base-100 dark:bg-base-900 border border-base-content/10 p-4 rounded text-xs md:text-sm font-medium focus:border-primary outline-none transition-all min-h-[120px] placeholder:text-base-content/20"
                                         value={formData.proof}
                                         onChange={(e) => setFormData({ ...formData, proof: e.target.value })}
-                                    />
+                                    ></textarea>
                                 </div>
 
                                 <div>
                                     <label className="text-xs font-bold text-[#0D7A5C] mb-2 block italic">• Thumbnail Image (optional)</label>
-                                    <button className="flex items-center gap-2 border border-gray-200 px-4 py-2 rounded text-xs font-bold text-gray-600 hover:bg-gray-50 transition-all">
-                                        <FaImage /> Select Image
-                                    </button>
+                                    <div className="flex items-center gap-4">
+                                        <button
+                                            onClick={handleThumbnailUpload}
+                                            className="flex items-center gap-2 border border-gray-200 dark:border-white/10 px-4 py-2 rounded text-xs font-bold text-base-content/60 hover:bg-base-200 transition-all"
+                                        >
+                                            <FaImage /> {formData.thumbnail ? 'Change Image' : 'Select Image'}
+                                        </button>
+                                        {formData.thumbnail && (
+                                            <div className="w-12 h-12 rounded overflow-hidden border border-base-content/10">
+                                                <img src={formData.thumbnail} alt="Thumbnail preview" className="w-full h-full object-cover" />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         )}
 
                         {step === 4 && (
-                            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                                <div className="flex items-center gap-2 text-red-500 font-bold text-sm mb-10">
-                                    <FaExclamationTriangle />
-                                    <span>please Increase your worker!</span>
+                            <div className="animate-in fade-in slide-in-from-right-4 duration-300 grid grid-cols-1 md:grid-cols-2 gap-12">
+                                <div className="space-y-6">
+                                    <div className="flex items-center justify-between gap-10">
+                                        <label className="text-sm font-bold text-[#0D7A5C]">Worker Need</label>
+                                        <input
+                                            type="number"
+                                            className="w-48 bg-base-100 dark:bg-base-900 border border-gray-200 dark:border-white/10 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
+                                            value={formData.workerNeed}
+                                            onChange={(e) => setFormData({ ...formData, workerNeed: parseInt(e.target.value) || 0 })}
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between gap-10">
+                                        <label className="text-sm font-bold text-[#0D7A5C]">Each worker Earn</label>
+                                        <input
+                                            type="number"
+                                            step="0.001"
+                                            className="w-48 bg-base-100 dark:bg-base-900 border border-gray-200 dark:border-white/10 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
+                                            value={formData.workerEarn}
+                                            onChange={(e) => setFormData({ ...formData, workerEarn: parseFloat(e.target.value) || 0 })}
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between gap-10">
+                                        <label className="text-sm font-bold text-[#0D7A5C]">Require Screenshots</label>
+                                        <input
+                                            type="number"
+                                            className="w-48 bg-base-100 dark:bg-base-900 border border-gray-200 dark:border-white/10 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
+                                            value={formData.requiredScreenshots}
+                                            onChange={(e) => setFormData({ ...formData, requiredScreenshots: parseInt(e.target.value) || 0 })}
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between gap-10">
+                                        <label className="text-sm font-bold text-[#0D7A5C]">Estimated Day</label>
+                                        <input
+                                            type="number"
+                                            className="w-48 bg-base-100 dark:bg-base-900 border border-gray-200 dark:border-white/10 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
+                                            value={formData.estimatedDays}
+                                            onChange={(e) => setFormData({ ...formData, estimatedDays: parseInt(e.target.value) || 0 })}
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between gap-10">
+                                        <label className="text-sm font-bold text-[#0D7A5C]">Boost Period <span className="text-gray-400 font-medium">(optional)</span></label>
+                                        <select
+                                            className="w-48 bg-base-100 dark:bg-base-900 border border-gray-200 dark:border-white/10 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
+                                            value={formData.boostPeriod}
+                                            onChange={(e) => setFormData({ ...formData, boostPeriod: e.target.value })}
+                                        >
+                                            <option value="None">None</option>
+                                            <option value="1h">1 Hour</option>
+                                            <option value="6h">6 Hours</option>
+                                            <option value="12h">12 Hours</option>
+                                            <option value="24h">24 Hours</option>
+                                        </select>
+                                    </div>
+                                    <div className="flex items-center justify-between gap-10">
+                                        <label className="text-sm font-bold text-[#0D7A5C]">Schedule Time <span className="text-gray-400 font-medium">(optional)</span></label>
+                                        <input
+                                            type="datetime-local"
+                                            className="w-48 bg-base-100 dark:bg-base-900 border border-gray-200 dark:border-white/10 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
+                                            value={formData.scheduleTime}
+                                            onChange={(e) => setFormData({ ...formData, scheduleTime: e.target.value })}
+                                        />
+                                    </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                    <div className="space-y-6">
-                                        <div className="flex items-center justify-between gap-10">
-                                            <label className="text-sm font-bold text-[#0D7A5C]">Worker Need</label>
-                                            <input
-                                                type="number"
-                                                className="w-48 border border-gray-200 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
-                                                value={formData.workerNeed}
-                                                onChange={(e) => setFormData({ ...formData, workerNeed: parseInt(e.target.value) || 0 })}
-                                            />
-                                        </div>
-                                        <div className="flex items-center justify-between gap-10">
-                                            <label className="text-sm font-bold text-[#0D7A5C]">Each worker Earn</label>
-                                            <input
-                                                type="number"
-                                                step="0.001"
-                                                className="w-48 border border-gray-200 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
-                                                value={formData.workerEarn}
-                                                onChange={(e) => setFormData({ ...formData, workerEarn: parseFloat(e.target.value) || 0 })}
-                                            />
-                                        </div>
-                                        <div className="flex items-center justify-between gap-10">
-                                            <label className="text-sm font-bold text-[#0D7A5C]">Require Screenshots</label>
-                                            <input
-                                                type="number"
-                                                className="w-48 border border-gray-200 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
-                                                value={formData.requiredScreenshots}
-                                                onChange={(e) => setFormData({ ...formData, requiredScreenshots: parseInt(e.target.value) || 0 })}
-                                            />
-                                        </div>
-                                        <div className="flex items-center justify-between gap-10">
-                                            <label className="text-sm font-bold text-[#0D7A5C]">Estimated Day</label>
-                                            <input
-                                                type="number"
-                                                className="w-48 border border-gray-200 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none"
-                                                value={formData.estimatedDays}
-                                                onChange={(e) => setFormData({ ...formData, estimatedDays: parseInt(e.target.value) || 0 })}
-                                            />
-                                        </div>
-                                        <div className="flex items-center justify-between gap-10">
-                                            <label className="text-sm font-bold text-[#0D7A5C]">Boost Period <span className="text-gray-400 font-medium">(optional)</span></label>
-                                            <select
-                                                className="w-48 border border-gray-200 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none bg-white"
-                                                value={formData.boostPeriod}
-                                                onChange={(e) => setFormData({ ...formData, boostPeriod: e.target.value })}
-                                            >
-                                                <option value="None">None</option>
-                                                <option value="1h">1 Hour</option>
-                                                <option value="6h">6 Hours</option>
-                                                <option value="12h">12 Hours</option>
-                                                <option value="24h">24 Hours</option>
-                                            </select>
-                                        </div>
-                                        <div className="flex items-center justify-between gap-10">
-                                            <label className="text-sm font-bold text-[#0D7A5C]">Schedule Time <span className="text-gray-400 font-medium">(optional)</span></label>
-                                            <input
-                                                type="datetime-local"
-                                                className="w-48 border border-gray-200 rounded px-4 py-3 text-sm focus:border-blue-500 outline-none bg-gray-100"
-                                                value={formData.scheduleTime}
-                                                onChange={(e) => setFormData({ ...formData, scheduleTime: e.target.value })}
-                                            />
-                                        </div>
-                                    </div>
+                                {/* Summary & Budget */}
+                                <div className="bg-white dark:bg-base-900 rounded-lg p-6 md:p-10 shadow-lg border border-base-content/5 h-fit sticky top-24">
+                                    <h3 className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-6">Estimated Job Cost</h3>
 
-                                    <div className="flex flex-col items-center">
-                                        <div className="w-full p-8 border border-gray-200 rounded-xl bg-white shadow-sm flex flex-col items-center">
-                                            <span className="text-sm font-bold text-gray-800 mb-6 uppercase tracking-wider">Estimated Job Cost</span>
-                                            <div className="relative w-full">
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</div>
-                                                <div className="w-full bg-red-50 border border-red-100 rounded-md py-4 px-10 text-[#0D7A5C] font-bold text-xl">
-                                                    {estimatedCost}
-                                                </div>
-                                            </div>
-                                            <span className="text-red-500 text-sm font-bold mt-4 italic">Minimum spend $0.80</span>
+                                    <div className="bg-[#FFF0F0] dark:bg-red-900/10 p-4 rounded-lg border border-red-100 dark:border-red-900/20 mb-4">
+                                        <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Cost</span>
+                                        <div className="text-3xl font-black text-[#0D7A5C] dark:text-[#0D7A5C] flex items-baseline gap-1">
+                                            <span className="text-base text-gray-400">$</span> {(formData.workerNeed * formData.workerEarn).toFixed(3)}
                                         </div>
                                     </div>
+                                    <p className="text-center text-[10px] text-red-500 font-bold italic mb-8">Minimum spend $0.80</p>
+
+                                    <button
+                                        onClick={handleSubmit}
+                                        disabled={parseFloat(estimatedCost) < minSpend}
+                                        className={`btn border-none px-8 rounded-lg font-bold h-12 shadow-md capitalize w-full ${parseFloat(estimatedCost) >= minSpend ? 'bg-[#00C875] text-white hover:bg-[#00ad66]' : 'bg-[#AAF4DB] text-white cursor-not-allowed'}`}
+                                    >
+                                        Submit Post
+                                    </button>
                                 </div>
                             </div>
                         )}
@@ -343,7 +397,7 @@ const PostJob = () => {
                             </button>
                         ) : (
                             <button
-                                onClick={() => alert('Job Posted Successfully')}
+                                onClick={handleSubmit}
                                 className={`btn border-none px-8 rounded-lg font-bold h-12 shadow-md capitalize ${parseFloat(estimatedCost) >= minSpend ? 'bg-[#00C875] text-white hover:bg-[#00ad66]' : 'bg-[#AAF4DB] text-white cursor-not-allowed'}`}
                                 disabled={parseFloat(estimatedCost) < minSpend}
                             >

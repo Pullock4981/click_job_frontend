@@ -1,52 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
-import { FaBell } from 'react-icons/fa';
+import { FaBell, FaSpinner } from 'react-icons/fa';
+import api from '../services/api';
+import { API_ENDPOINTS } from '../config/api';
 
 const Notifications = () => {
-    const [notifications] = useState([
-        {
-            id: 1,
-            type: 'PASSWORD_CHANGED',
-            message: 'You change your password recently',
-            date: '2025-12-27 22:34:44'
-        },
-        {
-            id: 2,
-            type: 'JOB_MODIFIED',
-            message: 'Your Job ID: 255135 Successfully present your job in a more standard way.',
-            date: '2025-12-21 22:52:57'
-        },
-        {
-            id: 3,
-            type: 'JOB_APPROVED',
-            message: 'Your Job ID: 255135 Approved with Worker Need 43',
-            date: '2025-12-21 22:40:19'
-        },
-        {
-            id: 4,
-            type: 'JOB_MODIFIED',
-            message: 'Your Job ID: 255135 Successfully present your job in a more standard way.',
-            date: '2025-12-21 22:40:16'
-        },
-        {
-            id: 5,
-            type: 'JOB_REJECT',
-            message: 'Job ID: 255135 Rejected & Refunded for "Dear sir please select your video length (1 8) minutes+subscribe category and post again. Re-apply again from \'My Jobs\'"',
-            date: '2025-12-21 22:36:47'
-        },
-        {
-            id: 6,
-            type: 'PASSWORD_CHANGED',
-            message: 'You change your password recently',
-            date: '2025-12-21 22:29:55'
-        },
-        {
-            id: 7,
-            type: 'JOB_APPROVED',
-            message: 'Your Job ID: 241672 Approved with Worker Need 30',
-            date: '2025-11-09 19:54:09'
+    const [notifications, setNotifications] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchNotifications();
+    }, []);
+
+    const fetchNotifications = async () => {
+        try {
+            setLoading(true);
+            const res = await api.get(API_ENDPOINTS.NOTIFICATIONS);
+            if (res.data?.data) {
+                setNotifications(res.data.data.notifications || []);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
         }
-    ]);
+    };
 
     return (
         <Layout showFooter={true}>
@@ -54,7 +32,7 @@ const Notifications = () => {
             <div className="bg-[#1e60d5] h-16 md:h-20 w-full relative"></div>
 
             <div className="mx-auto px-4 md:px-8 -mt-6 relative z-10 pb-20">
-                <div className="bg-white dark:bg-base-900 rounded-xl shadow-2xl overflow-hidden border border-base-200 dark:border-white/5">
+                <div className="bg-base-100 dark:bg-base-900 rounded-xl shadow-2xl overflow-hidden border border-base-200 dark:border-white/5">
                     <div className="p-6 md:p-8">
                         {/* Page Title */}
                         <div className="mb-6">

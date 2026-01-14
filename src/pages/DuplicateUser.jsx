@@ -22,25 +22,22 @@ const DuplicateUser = () => {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await api.get(API_ENDPOINTS.ADMIN_USERS);
-            const userData = Array.isArray(response.data) ? response.data : (response.data.users || []);
+            const response = await api.get(API_ENDPOINTS.ADMIN_DUPLICATE_USERS);
+            const userData = response.data.data?.users || [];
 
             const formattedUsers = userData.map(user => ({
-                id: user.id || user._id,
-                mainUser: user.referrer?.name || '', // Assuming referrer might be main user, or just empty
+                id: user._id,
+                mainUser: user.matchedIp || 'N/A', // Showing IP here
                 name: user.name || 'N/A',
                 email: user.email || 'N/A',
-                password: user.password || '******',
+                password: '******', // Security best practice not to show hash
                 verificationStatus: user.isVerified ? 'Verified' : 'Not Verified',
-                bio: user.jobPosted?.bio || '', // Assuming bio is stored here or empty
-                status: user.status || (user.isActive ? 'Active' : 'Inactive'),
-                earningBalance: user.walletBalance || 0,
+                bio: user.bio || '',
+                status: user.status ? (user.status.charAt(0).toUpperCase() + user.status.slice(1)) : 'Active',
+                earningBalance: user.earningBalance || 0,
                 depositBalance: user.depositBalance || 0
             }));
 
-            // For demo/mock purposes, let's filter or standard users. 
-            // Since we don't have a "duplicate" flag, we'll just show all or a subset.
-            // Screenshot shows one user "Shohag Hosen".
             setUsers(formattedUsers);
             setFilteredUsers(formattedUsers);
         } catch (error) {
@@ -130,7 +127,7 @@ const DuplicateUser = () => {
         <AdminLayout>
             <div className="p-4 md:p-6 bg-[#F4F6F9] min-h-screen">
                 <div className="bg-[#28a745] text-white p-4 rounded-t-md shadow-sm">
-                    <h1 className="text-xl font-normal">All Users</h1>
+                    <h1 className="text-xl font-normal">Duplicate Users</h1>
                 </div>
 
                 <div className="bg-white rounded-b-md shadow-md p-6">
@@ -154,7 +151,7 @@ const DuplicateUser = () => {
                             <thead>
                                 <tr className="bg-white border-b border-gray-200 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                                     <th className="p-3 border border-gray-200">ID</th>
-                                    <th className="p-3 border border-gray-200">Main User</th>
+                                    <th className="p-3 border border-gray-200">Matched IP</th>
                                     <th className="p-3 border border-gray-200">Name</th>
                                     <th className="p-3 border border-gray-200">Email</th>
                                     <th className="p-3 border border-gray-200">Password</th>

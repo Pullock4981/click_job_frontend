@@ -32,14 +32,14 @@ api.interceptors.response.use(
     if (error.response) {
       // Server responded with error
       const { status, data } = error.response;
-      
+
       if (status === 401) {
         // Unauthorized - clear token and redirect to login
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login';
       }
-      
+
       return Promise.reject({
         message: data?.message || 'An error occurred',
         errors: data?.errors || [],
@@ -58,6 +58,16 @@ api.interceptors.response.use(
     }
   }
 );
+
+api.upload = (url, file, fieldName = 'file') => {
+  const formData = new FormData();
+  formData.append(fieldName, file);
+  return api.post(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
 
 export default api;
 

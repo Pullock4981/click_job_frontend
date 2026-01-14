@@ -35,6 +35,42 @@ import DocumentVerifyRequest from './pages/DocumentVerifyRequest.jsx';
 import AdminAccountManage from './pages/AdminAccountManage.jsx';
 import AboutUs from './pages/AboutUs.jsx';
 import HeaderNoticeInfo from './pages/HeaderNoticeInfo.jsx';
+import CounterInfo from './pages/CounterInfo.jsx';
+import ContactInfoManage from './pages/ContactInfoManage.jsx';
+import ContactMessages from './pages/ContactMessages.jsx';
+import GoogleAdsManage from './pages/GoogleAdsManage.jsx';
+import PolicyManage from './pages/PolicyManage.jsx';
+import ServicesPage from './pages/ServicesPage.jsx';
+import AdsRatePage from './pages/AdsRatePage.jsx';
+import AdsListPage from './pages/AdsListPage.jsx';
+import ClickEarnAdsPage from './pages/ClickEarnAdsPage.jsx';
+import LotteryPage from './pages/LotteryPage.jsx';
+import PremiumPackageList from './pages/PremiumPackageList.jsx';
+import PremiumUsers from './pages/PremiumUsers.jsx';
+import ApprovalJobList from './pages/ApprovalJobList.jsx';
+import DeleteRequestJobList from './pages/DeleteRequestJobList.jsx';
+import JobWorkList from './pages/JobWorkList.jsx';
+import DepositAccountPage from './pages/DepositAccountPage.jsx';
+import DepositListPage from './pages/DepositListPage.jsx';
+import WithdrawMethodPage from './pages/WithdrawMethodPage.jsx';
+import WithdrawListPage from './pages/WithdrawListPage.jsx';
+import SMMCategoryPage from './pages/SMMCategoryPage.jsx';
+import SMMServicePage from './pages/SMMServicePage.jsx';
+import SMMRequestPage from './pages/SMMRequestPage.jsx';
+import HeadlineManager from './pages/HeadlineManager.jsx';
+import TopWorkerPage from './pages/TopWorkerPage.jsx';
+import TopJobPosterPage from './pages/TopJobPosterPage.jsx';
+import TopUserReportPage from './pages/TopUserReportPage.jsx';
+import ReferralDistributionPage from './pages/ReferralDistributionPage.jsx';
+import JobCategoryPage from './pages/JobCategoryPage.jsx';
+import JobSubCategoryPage from './pages/JobSubCategoryPage.jsx';
+import CountryPage from './pages/CountryPage.jsx';
+import LocationZonePage from './pages/LocationZonePage.jsx';
+import DefaultSetupPage from './pages/DefaultSetupPage.jsx';
+import SpinSettingPage from './pages/SpinSettingPage.jsx';
+import UserMessagePage from './pages/UserMessagePage.jsx';
+import CustomScriptPage from './pages/CustomScriptPage.jsx';
+import WebsiteInfoPage from './pages/WebsiteInfoPage.jsx';
 import Premium from './pages/Premium.jsx';
 import PostJob from './pages/PostJob.jsx';
 import MyTasks from './pages/MyTasks.jsx';
@@ -52,6 +88,9 @@ import Leaderboard from './pages/Leaderboard.jsx';
 import Wallet from './pages/Wallet.jsx';
 import AdsNew from './pages/AdsNew.jsx';
 import AdsHistory from './pages/AdsHistory.jsx';
+import JobDetail from './pages/JobDetail.jsx';
+import JobWorkReview from './pages/JobWorkReview.jsx';
+import LiveSupport from './pages/LiveSupport.jsx';
 
 
 import Ticket from './pages/Ticket.jsx';
@@ -108,7 +147,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/referral" element={<ReferralProgram />} />
+          <Route path="/referral" element={<ReferralProgram />} />
           <Route path="/share" element={<ReferralProgram />} />
+          <Route path="/live-support" element={<LiveSupport />} />
           <Route
             path="/login"
             element={isAuthenticated ? (user?.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/dashboard" />) : <Login />}
@@ -129,14 +170,57 @@ function App() {
           <Route path="/admin/accounts" element={<PrivateRoute adminOnly={true}><AdminAccountManage /></PrivateRoute>} />
           <Route path="/admin/about-us" element={<PrivateRoute adminOnly={true}><AboutUs /></PrivateRoute>} />
           <Route path="/admin/notice-info" element={<PrivateRoute adminOnly={true}><HeaderNoticeInfo /></PrivateRoute>} />
+          <Route path="/admin/counter-info" element={<PrivateRoute adminOnly={true}><CounterInfo /></PrivateRoute>} />
+          <Route path="/admin/contact-info" element={<PrivateRoute adminOnly={true}><ContactInfoManage /></PrivateRoute>} />
+          <Route path="/admin/contact-messages" element={<PrivateRoute adminOnly={true}><ContactMessages /></PrivateRoute>} />
+          <Route path="/admin/google-ads" element={<PrivateRoute adminOnly={true}><GoogleAdsManage /></PrivateRoute>} />
+          <Route path="/admin/policy" element={<PrivateRoute adminOnly={true}><PolicyManage /></PrivateRoute>} />
+          <Route path="/admin/services" element={<PrivateRoute adminOnly={true}><ServicesPage /></PrivateRoute>} />
+          <Route path="/admin/ads-rate" element={<PrivateRoute adminOnly={true}><AdsRatePage /></PrivateRoute>} />
+          <Route path="/admin/ads-list" element={<PrivateRoute adminOnly={true}><AdsListPage /></PrivateRoute>} />
+          <Route path="/admin/click-earn-ads" element={<PrivateRoute adminOnly={true}><ClickEarnAdsPage /></PrivateRoute>} />
+          <Route path="/admin/lottery-list" element={<PrivateRoute adminOnly={true}><LotteryPage /></PrivateRoute>} />
+          <Route path="/admin/package/list" element={<PrivateRoute adminOnly={true}><PremiumPackageList /></PrivateRoute>} />
+          <Route path="/admin/premium-users" element={<PrivateRoute adminOnly={true}><PremiumUsers /></PrivateRoute>} />
+          <Route path="/admin/jobs/approval" element={<PrivateRoute adminOnly={true}><ApprovalJobList /></PrivateRoute>} />
+          <Route path="/admin/jobs/delete-requests" element={<PrivateRoute adminOnly={true}><DeleteRequestJobList /></PrivateRoute>} />
+          <Route path="/admin/jobs/works" element={<PrivateRoute adminOnly={true}><JobWorkList /></PrivateRoute>} />
+          <Route path="/admin/deposit/accounts" element={<PrivateRoute adminOnly={true}><DepositAccountPage /></PrivateRoute>} />
+          <Route path="/admin/deposit/list" element={<PrivateRoute adminOnly={true}><DepositListPage /></PrivateRoute>} />
+          <Route path="/admin/withdraw/methods" element={<PrivateRoute adminOnly={true}><WithdrawMethodPage /></PrivateRoute>} />
+          <Route path="/admin/withdraw/list" element={<PrivateRoute adminOnly={true}><WithdrawListPage /></PrivateRoute>} />
+          <Route path="/admin/smm/category" element={<PrivateRoute adminOnly={true}><SMMCategoryPage /></PrivateRoute>} />
+          <Route path="/admin/smm/service" element={<PrivateRoute adminOnly={true}><SMMServicePage /></PrivateRoute>} />
+          <Route path="/admin/smm/requests" element={<PrivateRoute adminOnly={true}><SMMRequestPage /></PrivateRoute>} />
+          <Route path="/admin/headline/main" element={<PrivateRoute adminOnly={true}><HeadlineManager type="main" title="Main Headline" /></PrivateRoute>} />
+          <Route path="/admin/headline/task-prove" element={<PrivateRoute adminOnly={true}><HeadlineManager type="task-prove" title="Task Prove Headline" /></PrivateRoute>} />
+          <Route path="/admin/headline/applied-task" element={<PrivateRoute adminOnly={true}><HeadlineManager type="applied-task" title="Applied Task Headline" /></PrivateRoute>} />
+          <Route path="/admin/top/workers" element={<PrivateRoute adminOnly={true}><TopWorkerPage /></PrivateRoute>} />
+          <Route path="/admin/top/posters" element={<PrivateRoute adminOnly={true}><TopJobPosterPage /></PrivateRoute>} />
+          <Route path="/admin/boost-service" element={<PrivateRoute adminOnly={true}><HeadlineManager type="boost-service" title="Boost Service Headline" /></PrivateRoute>} />
+          <Route path="/admin/top/depositors" element={<PrivateRoute adminOnly={true}><TopUserReportPage type="top-deposit" title="Top 10 Deposit User" reportEndpoint="top-depositors" columnLabel="AMOUNT" columnValueKey="amount" formatValue={(val) => `$ ${val.toFixed(2)}`} /></PrivateRoute>} />
+          <Route path="/admin/top/best" element={<PrivateRoute adminOnly={true}><TopUserReportPage type="top-best" title="Top 10 Best Users" reportEndpoint="top-best-users" columnLabel="AMOUNT" columnValueKey="amount" formatValue={(val) => `$ ${val.toFixed(2)}`} /></PrivateRoute>} />
+          <Route path="/admin/top/referrals" element={<PrivateRoute adminOnly={true}><TopUserReportPage type="top-referral" title="Top 10 Refer" reportEndpoint="top-referrers" columnLabel="JOINED" columnValueKey="referralCount" formatValue={(val) => `${val} user`} /></PrivateRoute>} />
+          <Route path="/admin/setting/referral" element={<PrivateRoute adminOnly={true}><ReferralDistributionPage /></PrivateRoute>} />
+          <Route path="/admin/setting/job-category" element={<PrivateRoute adminOnly={true}><JobCategoryPage /></PrivateRoute>} />
+          <Route path="/admin/setting/job-sub-category" element={<PrivateRoute adminOnly={true}><JobSubCategoryPage /></PrivateRoute>} />
+          <Route path="/admin/setting/country" element={<PrivateRoute adminOnly={true}><CountryPage /></PrivateRoute>} />
+          <Route path="/admin/setting/location-zone" element={<PrivateRoute adminOnly={true}><LocationZonePage /></PrivateRoute>} />
+          <Route path="/admin/setting/default" element={<PrivateRoute adminOnly={true}><DefaultSetupPage /></PrivateRoute>} />
+          <Route path="/admin/setting/spin" element={<PrivateRoute adminOnly={true}><SpinSettingPage /></PrivateRoute>} />
+          <Route path="/admin/setting/messages" element={<PrivateRoute adminOnly={true}><UserMessagePage /></PrivateRoute>} />
+          <Route path="/admin/setting/scripts" element={<PrivateRoute adminOnly={true}><CustomScriptPage /></PrivateRoute>} />
+          <Route path="/admin/settings" element={<PrivateRoute adminOnly={true}><WebsiteInfoPage /></PrivateRoute>} />
           <Route path="/premium" element={<PrivateRoute><Premium /></PrivateRoute>} />
           <Route path="/post-job" element={<PrivateRoute><PostJob /></PrivateRoute>} />
           <Route path="/my-work" element={<PrivateRoute><Navigate to="/my-work/tasks" /></PrivateRoute>} />
           <Route path="/my-work/tasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
           <Route path="/my-work/accepted" element={<PrivateRoute><AcceptedTasks /></PrivateRoute>} />
           <Route path="/my-jobs" element={<PrivateRoute><MyJobs /></PrivateRoute>} />
+          <Route path="/my-jobs/review" element={<PrivateRoute><JobWorkReview /></PrivateRoute>} />
           <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
           <Route path="/deposit" element={<PrivateRoute><Deposit /></PrivateRoute>} />
+          <Route path="/jobs/:id" element={<PrivateRoute><JobDetail /></PrivateRoute>} />
 
           <Route path="/transactions" element={<Navigate to="/transactions/deposit" />} />
           <Route path="/transactions/withdraw" element={<PrivateRoute><TransactionsHistory type="withdraw" /></PrivateRoute>} />

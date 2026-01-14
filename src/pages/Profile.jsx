@@ -101,7 +101,29 @@ const Profile = () => {
     };
 
     const handleImageSelect = () => {
-        toast.error('Image upload is not available in Demo mode.');
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            try {
+                toast.loading('Uploading image...', { id: 'upload' });
+                const res = await api.upload('/upload/single', file);
+                if (res.success) {
+                    // Update profile with new image URL
+                    const updateRes = await api.put('/users/profile', { profilePicture: res.data.url });
+                    if (updateRes.success) {
+                        updateUser(updateRes.data.user);
+                        toast.success('Profile picture updated!', { id: 'upload' });
+                    }
+                }
+            } catch (err) {
+                toast.error(err.message || 'Upload failed', { id: 'upload' });
+            }
+        };
+        input.click();
     };
 
     if (loading) {
@@ -150,7 +172,7 @@ const Profile = () => {
     if (!isManaging) {
         return (
             <Layout showFooter={true}>
-                <div className="min-h-screen bg-base-100 -m-2 xs:-m-3 md:-m-8 pb-12 transition-all duration-300">
+                <div className="min-h-screen bg-base-100 dark:bg-base-900 pb-12 transition-all duration-300">
                     <div className="bg-[#5BADE3] h-48 md:h-56 w-full relative"></div>
                     <div className="max-w-7xl mx-auto px-2 xs:px-4 md:px-8 -mt-32 md:-mt-40 relative z-10">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -237,7 +259,7 @@ const Profile = () => {
                                     <div className="space-y-3 mb-10 text-base-content/40 dark:text-base-content/30">
                                         <p className="text-xs font-black uppercase tracking-wider">Joined {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : '12/31/2025'}</p>
                                         <p className="text-[11px] font-black text-green-500 uppercase tracking-widest mt-2 animate-bounce">I'm online</p>
-                                        <p className="text-sm font-black text-base-content mt-2 transition-colors">User ID: <span className="text-primary">{user?.id?.slice(-5) || user?._id?.slice(-5) || 'a306b'}</span></p>
+                                        <p className="text-sm font-black text-base-content mt-2 transition-colors">User ID: <span className="text-primary">{user?.numericId || '-----'}</span></p>
                                         <div className="flex items-center justify-center gap-2 text-xs font-bold mt-4">
                                             <FaMapMarkerAlt className="text-[#5BADE3]" />
                                             <span className="uppercase tracking-widest">{user?.country || 'Global'} - {user?.role || 'admin'}</span>
@@ -311,7 +333,7 @@ const Profile = () => {
     // Manage Profile View
     return (
         <Layout showFooter={true}>
-            <div className="min-h-screen bg-base-100 -m-2 xs:-m-3 md:-m-8 pb-12 transition-all duration-300">
+            <div className="min-h-screen bg-base-100 dark:bg-base-900 pb-12 transition-all duration-300">
                 {/* Header Blue Background */}
                 <div className="bg-[#5BADE3] h-48 md:h-56 w-full relative flex items-center justify-start px-4 md:px-12">
                     <button
@@ -325,7 +347,7 @@ const Profile = () => {
                 <div className="max-w-6xl mx-auto px-2 xs:px-4 md:px-8 -mt-24 md:-mt-32 relative z-10 space-y-6">
 
                     {/* Top Avatar Card */}
-                    <div className="bg-base-100 rounded-xl shadow-xl border border-base-content/5 p-10 flex flex-col items-center">
+                    <div className="bg-base-100 dark:bg-base-800 rounded-xl shadow-xl border border-base-content/5 p-10 flex flex-col items-center">
                         <div className="w-32 h-32 rounded-full border-[6px] border-base-300 shadow-xl overflow-hidden bg-[#5BADE3] flex items-center justify-center mb-6">
                             {user?.profilePicture ? (
                                 <img src={user.profilePicture} alt="Avatar" className="w-full h-full object-cover" />
@@ -344,7 +366,7 @@ const Profile = () => {
                     <h2 className="text-xl font-black text-base-content px-1 transition-colors">Edit profile</h2>
 
                     {/* Account Information Card */}
-                    <div className="bg-base-100 rounded-xl shadow-xl border border-base-content/5 overflow-hidden">
+                    <div className="bg-base-100 dark:bg-base-800 rounded-xl shadow-xl border border-base-content/5 overflow-hidden">
                         <div className="p-5 border-b border-base-content/5 bg-base-200/30">
                             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/40 transition-colors">Account Information</h3>
                         </div>
@@ -414,7 +436,7 @@ const Profile = () => {
                     </div>
 
                     {/* Security Code Card */}
-                    <div className="bg-base-100 rounded-xl shadow-xl border border-base-content/5 overflow-hidden">
+                    <div className="bg-base-100 dark:bg-base-800 rounded-xl shadow-xl border border-base-content/5 overflow-hidden">
                         <div className="p-5 border-b border-base-content/5 bg-base-200/30">
                             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-red-500 transition-colors">Security Code: For Password Recovery</h3>
                         </div>
@@ -439,7 +461,7 @@ const Profile = () => {
                     </div>
 
                     {/* Account Password Card */}
-                    <div className="bg-base-100 rounded-xl shadow-xl border border-base-content/5 overflow-hidden">
+                    <div className="bg-base-100 dark:bg-base-800 rounded-xl shadow-xl border border-base-content/5 overflow-hidden">
                         <div className="p-5 border-b border-base-content/5 bg-base-200/30 font-black text-[10px] uppercase tracking-[0.2em] text-base-content/40 transition-colors">Account Password</div>
                         <div className="p-8">
                             <form onSubmit={handleChangePassword} className="space-y-8">

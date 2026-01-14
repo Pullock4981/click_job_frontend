@@ -102,6 +102,7 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     updateUser,
+    refreshUser: fetchUser,
     isAuthenticated: !!user && !!token,
   };
 
