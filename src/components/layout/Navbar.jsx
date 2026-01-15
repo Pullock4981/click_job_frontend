@@ -130,13 +130,18 @@ const Navbar = ({ toggleSidebar }) => {
             {/* Earning Balance Pilled */}
             <div className="flex items-center gap-1 bg-blue-900/60 dark:bg-black/20 px-2 xs:px-3 md:px-4 py-1.5 rounded-md border border-white/5 transition-all hover:bg-white/10 flex-shrink-0">
               <span className="hidden min-[600px]:inline text-[10px] md:text-[11px] text-white font-bold">Earning:</span>
-              <span className="text-[11px] sm:text-xs md:text-sm font-black text-white">{user?.earningBalance?.toFixed(3) || '0.000'}</span>
+              <span className="text-[11px] sm:text-xs md:text-sm font-black text-white">${user?.earningBalance?.toFixed(3) || '0.000'}</span>
             </div>
 
             {/* Deposit Balance Pilled */}
             <div className="flex items-center gap-1 bg-[#008000] px-2 xs:px-3 md:px-4 py-1.5 rounded-md shadow-lg transition-all hover:scale-105 border border-white/10 flex-shrink-0">
               <span className="hidden min-[600px]:inline text-[10px] md:text-[11px] text-white font-bold">Deposit:</span>
-              <span className="text-[11px] sm:text-xs md:text-sm font-black text-white">{user?.depositBalance?.toFixed(3) || '0.000'}</span>
+              <span className="text-[11px] sm:text-xs md:text-sm font-black text-white">${user?.depositBalance?.toFixed(3) || '0.000'}</span>
+              {user?.pendingDeposit > 0 && (
+                <span className="text-[9px] md:text-[10px] text-yellow-200 ml-1 font-bold whitespace-nowrap" title="Pending Approval">
+                  (+${user.pendingDeposit} Pending)
+                </span>
+              )}
             </div>
 
 

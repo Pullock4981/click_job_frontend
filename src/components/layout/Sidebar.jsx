@@ -23,7 +23,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
     const menuItems = [
         { icon: <FaSearch />, label: 'Find Jobs', path: '/dashboard' },
-        ...(user?.role === 'admin' ? [{ icon: <FaUserShield className="text-secondary" />, label: 'Admin Panel', path: '/admin' }] : []),
+        ...(user?.role === 'admin' ? [{
+            icon: <FaUserShield className="text-secondary" />,
+            label: 'Admin Panel',
+            path: '/admin',
+            hasSubmenu: true,
+            subItems: [
+                { label: 'Dashboard', path: '/admin' },
+                { label: 'Manage Deposits', path: '/admin/deposit/list' },
+                { label: 'User List', path: '/admin/users' }
+            ]
+        }] : []),
         { icon: <FaStar className="text-[#FF6B6B]" />, label: 'Premium', path: '/premium', isPremium: true },
         { icon: <FaPlusCircle />, label: 'Post New Job', path: '/post-job' },
         {

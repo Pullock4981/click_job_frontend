@@ -20,7 +20,7 @@ const PostJob = () => {
         // Step 3: Job Info
         title: '',
         note: '',
-        tasks: [''],
+        tasks: [{ id: Date.now(), instruction: '' }],
         proof: '',
         thumbnail: null,
 
@@ -48,14 +48,15 @@ const PostJob = () => {
     const categories = ['Ads Click', 'Airdrop Join', 'Answers', 'App Pre Tester', 'Assignment', 'Audio Mack', 'Back Link', 'Blog', 'Comment', 'Computer Programs', 'Discord', 'Edit', 'Facebook', 'Facebook-Invite', 'Fiverr', 'Gmail Account', 'Graphics Design', 'Instagram', 'Kyc Submit', 'Linkedin', 'Medium', 'Mobile Application', 'Need Follower', 'Others', 'Promotion', 'Quora', 'Reddit', 'Reel / Short', 'Refer Program', 'Review', 'Search / Click', 'Share', 'Sign Up', 'Sound Cloud', 'Story', 'Survey', 'Telegram', 'Tik-tok', 'Twitter', 'Typing', 'Views', 'Visitor', 'Website', 'Whats-App', 'Write an Article', 'YouTube / Toffe'];
     const subCategories = ['1 Ads click for Youtube Video', '2 Ads click for Youtube Video', '1 Ads click for Facebook Video', '2 Ads click for Facebook Video', 'Website Ads Click'];
 
-    const addTask = () => setFormData({ ...formData, tasks: [...formData.tasks, ''] });
-    const removeTask = (index) => {
-        const newTasks = formData.tasks.filter((_, i) => i !== index);
+    const addTask = () => setFormData({ ...formData, tasks: [...formData.tasks, { id: Date.now() + Math.random(), instruction: '' }] });
+    const removeTask = (id) => {
+        const newTasks = formData.tasks.filter(t => t.id !== id);
         setFormData({ ...formData, tasks: newTasks });
     };
-    const updateTask = (index, value) => {
-        const newTasks = [...formData.tasks];
-        newTasks[index] = value;
+    const updateTask = (id, value) => {
+        const newTasks = formData.tasks.map(t =>
+            t.id === id ? { ...t, instruction: value } : t
+        );
         setFormData({ ...formData, tasks: newTasks });
     };
 
@@ -116,12 +117,24 @@ const PostJob = () => {
 
     const handleSubmit = async () => {
         try {
-            const res = await api.post('/jobs', formData);
+            // Transform object tasks to string array for backend
+            const submitData = {
+                ...formData,
+                tasks: formData.tasks.map(t => t.instruction).filter(i => i.trim() !== '')
+            };
+
+            // Remove empty scheduleTime to avoid Date cast error
+            if (!submitData.scheduleTime) {
+                delete submitData.scheduleTime;
+            }
+
+            const res = await api.post('/jobs', submitData);
             if (res.success) {
                 toast.success('Job Posted Successfully!');
                 navigate('/my-jobs');
             }
         } catch (err) {
+            console.error('Job post error:', err);
             toast.error(err.message || 'Failed to post job');
         }
     };

@@ -16,7 +16,8 @@ const ApprovalJobList = () => {
         try {
             setLoading(true);
             const res = await api.get(API_ENDPOINTS.APPROVAL_JOBS);
-            setJobs(res.data?.data || []);
+            // api.js interceptor unwraps response, so res IS the body { success: true, data: [...] }
+            setJobs(res.data || []);
         } catch (err) {
             console.error(err);
             setJobs([]);
